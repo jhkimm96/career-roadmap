@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 11 — X-Window</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 11 · X-Window 개념</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">X-Window 구성요소</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구성요소</th><th>설명</th></tr>
+        <tr><td class="hot">XProtocol</td><td>X서버-클라이언트 간 통신 프로토콜, 화면 출력 및 입력 처리 담당</td></tr>
+        <tr><td class="hot">Xlib</td><td>클라이언트 라이브러리</td></tr>
+        <tr><td class="hot">XCB</td><td>Xlib를 대체하기 위해 등장. 향상된 스레드 기능, 확장성 우수</td></tr>
+        <tr><td class="hot">Xtoolkit</td><td>위젯 툴킷</td></tr>
+        <tr><td class="hot">XFree86</td><td>서버 구현체</td></tr>
+        <tr><td class="hot">XF86Config</td><td>XFree86 설정 파일</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 Xlib = XCB 라이브러리</div>
+      <p>X-Window TCP 포트번호: <strong>6000+</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">데스크탑 환경 ⭐⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>KDE</th><th>GNOME</th></tr>
+        <tr><td>라이브러리</td><td class="hot">Qt (C++)</td><td class="hot">GTK+ (LGPL, GNU)</td></tr>
+        <tr><td>윈도매니저</td><td class="hot">Kwin</td><td class="hot">Mutter (GNOME3) / Metacity (GNOME2)</td></tr>
+        <tr><td>파일관리자</td><td>Konqueror</td><td class="hot">Nautilus</td></tr>
+        <tr><td>디스플레이매니저</td><td class="hot">KDM</td><td class="hot">GDM (GTK+, GNU GPL)</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구성요소</th><th>역할</th></tr>
+        <tr><td class="hot">데스크탑 환경</td><td>파일관리자, 아이콘, 창 도구, 배경화면 등 GUI 환경 전체</td></tr>
+        <tr><td class="hot">윈도 매니저</td><td>X윈도 상에서 창의 <strong>배치와 표현</strong> 담당. Xlib/XCB 사용</td></tr>
+        <tr><td class="hot">디스플레이 매니저</td><td>사용자 <strong>로그인 및 세션 관리</strong>. XDM, GDM, KDM</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 기타 데스크탑</div>
+      <p>LXDE, XFCE(자체 윈도매니저 xfwm), GNOME, KDE</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">X-Window 원격 활용 ⭐⭐</div>
+    <div class="section-sub">기출 포인트: xhost vs xauth, DISPLAY 환경변수</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령/파일</th><th>설명</th></tr>
+        <tr><td class="mono hot">xhost</td><td>X서버에 접속할 수 있는 클라이언트를 <strong>IP 기반</strong>으로 허가/해제</td></tr>
+        <tr><td class="mono hot">xauth</td><td><strong>MMC 방식</strong> 인증 (쿠키 기반, 더 안전)</td></tr>
+        <tr><td class="mono hot">.Xauthority</td><td>X윈도 실행 시 관련 키 정보 저장 파일</td></tr>
+        <tr><td class="mono hot">DISPLAY</td><td>X 클라이언트를 원격지로 전송하기 위해 변경하는 환경변수</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>xhost 명령</th><th>의미</th></tr>
+        <tr><td class="mono hot">xhost + IP주소</td><td>해당 IP 접근 허가</td></tr>
+        <tr><td class="mono hot">xhost - IP주소</td><td>해당 IP 차단</td></tr>
+        <tr><td class="mono hot">xhost + (디폴트)</td><td>명시적 차단 클라이언트 외 모두 허용</td></tr>
+        <tr><td class="mono hot">xhost -</td><td>명시적 허용 클라이언트 외 모두 차단</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+<span class="comment"># DISPLAY 환경변수 설정 형식</span>
+export DISPLAY="<span class="yellow">IP주소:디스플레이번호.스크린번호</span>"
+export DISPLAY="192.168.1.10:0.0"
+<span class="comment"># 번호는 0부터 시작</span>
+
+<span class="comment"># xauth 쿠키 확인</span>
+xauth list $DISPLAY
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">X-Window 설정 & 부팅</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령</th><th>설명</th></tr>
+        <tr><td class="mono hot">systemctl set-default graphical.target</td><td>부팅 시 <strong>X윈도</strong> 모드로 설정</td></tr>
+        <tr><td class="mono hot">systemctl set-default multi-user.target</td><td>부팅 시 <strong>텍스트</strong> 모드로 설정</td></tr>
+        <tr><td class="mono">systemctl get-default</td><td>현재 기본 부팅 타겟 확인</td></tr>
+        <tr><td class="mono">Ctrl+Alt+BackSpace</td><td>X-Window 강제 종료</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">X-Window 응용 프로그램</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>분야</th><th>프로그램</th></tr>
+        <tr><td>오피스</td><td>LibreOffice (Writer/Calc/Impress/Draw), gedit, kwrite</td></tr>
+        <tr><td>그래픽</td><td>GIMP(이미지 편집), ImageMagick, eog(Eye of GNOME, 이미지뷰어)</td></tr>
+        <tr><td>멀티미디어</td><td><strong>Totem</strong>(동영상 재생), RHYTHMBOX</td></tr>
+        <tr><td>파일관리</td><td>nautilus(GNOME), konqueror(KDE)</td></tr>
+        <tr><td>PDF</td><td>Evince</td></tr>
+        <tr><td>웹브라우저(콘솔)</td><td>links, lynx (X윈도 없이 텍스트 기반)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic10.html" class="page-btn">← Topic 10: 프린터</a>
+    <a href="topic12.html" class="page-btn center">Topic 12: IP 클래스 →</a>
+  </div>
+</div>
+</body>
+</html>

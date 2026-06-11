@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 01 — 권한 & 파일 허가권</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 01 · 권한 & 파일 허가권</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+
+<div class="content">
+
+  <!-- chown -->
+  <div class="section">
+    <div class="section-title">소유권 관련 명령어</div>
+    <div class="section-sub">기출 포인트: chown 형식, -R 옵션, 콜론(:) 구분자</div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>형식</th><th>설명</th></tr>
+        <tr>
+          <td class="mono hot">chown</td>
+          <td class="mono">chown [옵션] 소유자[:그룹] 파일명</td>
+          <td>소유자/그룹 소유권 변경. 그룹 앞에 <span class="hot">콜론(:)</span> 사용</td>
+        </tr>
+        <tr>
+          <td class="mono"></td>
+          <td class="mono">chown -R root ihd</td>
+          <td><span class="green">-R</span> : 하위 디렉터리 포함 재귀 변경</td>
+        </tr>
+        <tr>
+          <td class="mono"></td>
+          <td class="mono">chown :root test</td>
+          <td>그룹 소유권만 root로 변경</td>
+        </tr>
+        <tr>
+          <td class="mono hot">chgrp</td>
+          <td class="mono">chgrp [-h] 그룹명 파일명</td>
+          <td>그룹 소유권만 변경. <span class="green">-h</span>: 심볼릭링크 그룹 변경</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="box box-red">
+      <div class="box-title">⚠️ 기출 자주 나오는 형식</div>
+      <ul>
+        <li><code>chown ihduser:kait lin.txt</code> → lin.txt 소유자=ihduser, 그룹=kait</li>
+        <li><code>chown kait:ihduser lin.txt</code> → 소유자=kait, 그룹=ihduser</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- chmod -->
+  <div class="section">
+    <div class="section-title">허가권 (chmod)</div>
+    <div class="section-sub">기출 포인트: 숫자 계산, 레퍼런스 클래스(u/g/o/a), 연산자(+/-/=)</div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>모드</th><th>이름</th><th>숫자값</th></tr>
+        <tr><td class="mono hot">r</td><td>읽기(read)</td><td class="yellow">4</td></tr>
+        <tr><td class="mono hot">w</td><td>쓰기(write)</td><td class="yellow">2</td></tr>
+        <tr><td class="mono hot">x</td><td>실행(execute)</td><td class="yellow">1</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>클래스</th><th>의미</th></tr>
+        <tr><td class="mono hot">u</td><td>소유자(owner)</td></tr>
+        <tr><td class="mono hot">g</td><td>그룹(group)</td></tr>
+        <tr><td class="mono hot">o</td><td>기타 사용자(others)</td></tr>
+        <tr><td class="mono hot">a</td><td>모든 사용자(all) = ugo</td></tr>
+      </table>
+    </div>
+
+    <div class="code-block">
+<span class="comment"># 기본 권한</span>
+파일: <span class="yellow">666</span> (rw-rw-rw-)
+디렉터리: <span class="yellow">777</span> (rwxrwxrwx)
+
+<span class="comment"># 예시</span>
+chmod <span class="yellow">755</span> file      <span class="comment"># rwxr-xr-x</span>
+chmod g=r lin.txt  <span class="comment"># 그룹 읽기만</span>
+chmod -R o+w TST   <span class="comment"># 하위 전체 기타사용자 쓰기추가</span>
+chmod a=rx file    <span class="comment"># 모든 사용자 읽기+실행</span>
+chmod u-x file     <span class="comment"># 소유자 실행 제거</span>
+    </div>
+  </div>
+
+  <!-- umask -->
+  <div class="section">
+    <div class="section-title">umask</div>
+    <div class="section-sub">기출 포인트: umask 값으로 생성되는 파일/디렉터리 권한 계산</div>
+
+    <div class="box box-blue">
+      <div class="box-title">📐 계산법</div>
+      <p>파일 기본권한(666) - umask = 파일 허가권</p>
+      <p>디렉터리 기본권한(777) - umask = 디렉터리 허가권</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>umask 값</th><th>파일 생성 권한</th><th>디렉터리 생성 권한</th></tr>
+        <tr><td class="mono yellow">0022</td><td class="green">644 (rw-r--r--)</td><td class="green">755 (rwxr-xr-x)</td></tr>
+        <tr><td class="mono yellow">0002</td><td class="green">664 (rw-rw-r--)</td><td class="green">775 (rwxrwxr-x)</td></tr>
+        <tr><td class="mono yellow">0000</td><td>666 (rw-rw-rw-)</td><td>777 (rwxrwxrwx)</td></tr>
+      </table>
+    </div>
+
+    <div class="memory">
+      <div class="mem-label">💡 암기 팁</div>
+      <p><strong>umask 0022</strong> → 파일 <strong>644</strong>, 디렉터리 <strong>755</strong> (가장 자주 출제!)</p>
+    </div>
+  </div>
+
+  <!-- 특수권한 -->
+  <div class="section">
+    <div class="section-title">특수권한 ⭐⭐⭐</div>
+    <div class="section-sub">기출 포인트: SetUID/SetGID/Sticky Bit 숫자값, 적용 대상, chmod 예시</div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>종류</th><th>숫자</th><th>기호</th><th>설명</th><th>적용대상</th></tr>
+        <tr>
+          <td class="hot">SetUID</td>
+          <td class="yellow">4000</td>
+          <td class="mono">s (소유자 실행자리)</td>
+          <td>실행 시 <strong>소유자 권한</strong>으로 실행</td>
+          <td>실행파일</td>
+        </tr>
+        <tr>
+          <td class="hot">SetGID</td>
+          <td class="yellow">2000</td>
+          <td class="mono">s (그룹 실행자리)</td>
+          <td>실행 시 <strong>그룹 권한</strong>으로 실행. 디렉터리에 설정 시 파일 생성 시 그룹 자동 부여</td>
+          <td>실행파일, 디렉터리</td>
+        </tr>
+        <tr>
+          <td class="hot">Sticky Bit</td>
+          <td class="yellow">1000</td>
+          <td class="mono">t (기타 실행자리)</td>
+          <td>파일 삭제 시 <strong>소유자만</strong> 삭제 가능. /tmp에 설정됨</td>
+          <td>디렉터리</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="box box-red">
+      <div class="box-title">⭐ 기출 핵심 예시</div>
+      <ul>
+        <li><code>/usr/bin/passwd</code> → SetUID 설정 (일반사용자도 비밀번호 변경 가능)</li>
+        <li>Sticky Bit(1) + SetGID(2) = <code>chmod 3770 /project</code></li>
+        <li>그룹 사용자 파일 삭제 본인것만 → <strong>Sticky Bit</strong></li>
+        <li>파일 생성 시 그룹 자동 부여 → <strong>SetGID</strong></li>
+      </ul>
+    </div>
+
+    <div class="code-block">
+chmod <span class="yellow">4755</span> file    <span class="comment"># SetUID (rwsr-xr-x)</span>
+chmod <span class="yellow">2770</span> /dir   <span class="comment"># SetGID</span>
+chmod <span class="yellow">1777</span> /tmp   <span class="comment"># Sticky Bit (/tmp 기본값)</span>
+chmod <span class="yellow">3770</span> /proj  <span class="comment"># Sticky + SetGID</span>
+chmod o+t /project   <span class="comment"># Sticky Bit 추가</span>
+    </div>
+
+    <div class="box box-yellow">
+      <div class="box-title">실행파일 여부에 따른 표시</div>
+      <p>실행 가능 → <strong>s</strong> (소문자), 실행 불가 → <strong>S</strong> (대문자)</p>
+    </div>
+  </div>
+
+  <!-- ls -l 해석 -->
+  <div class="section">
+    <div class="section-title">ls -l 출력 해석</div>
+
+    <div class="code-block">
+-rw-r--r--  1  root  root  1234  Jan 1  file.txt
+<span class="comment">↑         ↑  ↑     ↑     ↑     ↑     ↑</span>
+<span class="comment">파일유형+권한 링크수 소유자 그룹 크기 날짜 파일명</span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>첫글자</th><th>파일 유형</th></tr>
+        <tr><td class="mono">-</td><td>일반 파일</td></tr>
+        <tr><td class="mono">d</td><td>디렉터리</td></tr>
+        <tr><td class="mono">l</td><td>심볼릭 링크</td></tr>
+        <tr><td class="mono">b</td><td>블록 장치 파일</td></tr>
+        <tr><td class="mono">c</td><td>입출력(문자) 파일</td></tr>
+        <tr><td class="mono">s</td><td>소켓 파일</td></tr>
+        <tr><td class="mono">p</td><td>파이프 파일</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="index.html" class="page-btn">← 목록</a>
+    <a href="topic02.html" class="page-btn center">Topic 02: 파일시스템 →</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 12 — IP 클래스 & 서브넷</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 12 · IP 클래스 & 서브넷</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">IP 클래스 ⭐⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>클래스</th><th>범위</th><th>기본 서브넷 마스크</th><th>CIDR</th></tr>
+        <tr><td class="hot">A</td><td class="mono">0.0.0.0 ~ 127.255.255.255</td><td class="mono yellow">255.0.0.0</td><td class="yellow">/8</td></tr>
+        <tr><td class="hot">B</td><td class="mono">128.0.0.0 ~ 191.255.255.255</td><td class="mono yellow">255.255.0.0</td><td class="yellow">/16</td></tr>
+        <tr><td class="hot">C</td><td class="mono">192.0.0.0 ~ 223.255.255.255</td><td class="mono yellow">255.255.255.0</td><td class="yellow">/24</td></tr>
+        <tr><td>D</td><td class="mono">224.0.0.0 ~ 239.255.255.255</td><td>멀티캐스트</td><td>-</td></tr>
+        <tr><td>E</td><td class="mono">240.0.0.0 ~ 255.255.255.255</td><td>연구용</td><td>-</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>클래스</th><th>사설 IP 대역</th></tr>
+        <tr><td class="hot">A</td><td class="mono">10.0.0.0 ~ 10.255.255.255</td></tr>
+        <tr><td class="hot">B</td><td class="mono">172.16.0.0 ~ 172.31.255.255</td></tr>
+        <tr><td class="hot">C</td><td class="mono">192.168.0.0 ~ 192.168.255.255</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 특수 주소</div>
+      <p>0.0.0.0 = 디폴트 경로 | 255.255.255.255 = 브로드캐스트</p>
+      <p>루프백(Loopback) 127.0.0.0/8 → <strong>A클래스</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">서브넷 계산 ⭐⭐</div>
+    <div class="section-sub">기출 포인트: 서브넷 개수, 호스트 수, 게이트웨이 주소 계산</div>
+    <div class="box box-blue">
+      <div class="box-title">📐 계산 공식</div>
+      <p>서브넷 개수 = <strong>2^(빌린 비트 수)</strong></p>
+      <p>서브넷당 호스트 수 = <strong>2^(호스트 비트 수) - 2</strong> (네트워크/브로드캐스트 주소 제외)</p>
+    </div>
+    <div class="box box-yellow">
+      <div class="box-title">📌 예제: C클래스 255.255.255.192 (/26)</div>
+      <p>마지막 옥텟: 11000000 → 서브넷 비트 2개 빌림</p>
+      <p>서브넷 개수: 2^2 = <strong>4개</strong></p>
+      <p>호스트 수: 2^6 - 2 = <strong>62개</strong></p>
+    </div>
+    <div class="box box-red">
+      <div class="box-title">⭐ 기출 예제: IP 192.168.5.150, 서브넷마스크 255.255.255.192</div>
+      <p>192 = 11000000 → 호스트 비트 6개</p>
+      <p>192.168.5.128/26 네트워크 → 게이트웨이 보통 192.168.5.129</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">IPv4 vs IPv6</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>IPv4</th><th>IPv6</th></tr>
+        <tr><td>비트 수</td><td class="yellow">32bit</td><td class="yellow">128bit</td></tr>
+        <tr><td>표기</td><td>점(.) 구분 10진수</td><td>콜론(:) 구분 16진수</td></tr>
+        <tr><td>MAC 주소</td><td colspan="2" class="yellow">48bit</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ARP & RARP</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>프로토콜</th><th>방향</th><th>설명</th></tr>
+        <tr><td class="mono hot">ARP</td><td class="yellow">IP → MAC</td><td>IP 주소로 MAC 주소를 찾는 프로토콜</td></tr>
+        <tr><td class="mono hot">RARP</td><td class="yellow">MAC → IP</td><td>MAC 주소로 IP 주소를 찾는 프로토콜</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic11.html" class="page-btn">← Topic 11: X-Window</a>
+    <a href="topic13.html" class="page-btn center">Topic 13: OSI 7계층 →</a>
+  </div>
+</div>
+</body>
+</html>

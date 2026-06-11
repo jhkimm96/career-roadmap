@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 14 — 프로토콜 포트번호</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 14 · 프로토콜 포트번호</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">포트번호 전체표 ⭐⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>포트</th><th>프로토콜</th><th>전송</th><th>설명</th></tr>
+        <tr><td class="yellow">20</td><td class="hot">FTP</td><td>TCP</td><td>데이터 전송</td></tr>
+        <tr><td class="yellow">21</td><td class="hot">FTP</td><td>TCP</td><td>제어(연결)</td></tr>
+        <tr><td class="yellow">22</td><td class="hot">SSH</td><td>TCP</td><td>보안 원격접속</td></tr>
+        <tr><td class="yellow">23</td><td class="hot">Telnet</td><td>TCP</td><td>평문 원격접속</td></tr>
+        <tr><td class="yellow">25</td><td class="hot">SMTP</td><td>TCP</td><td>메일 송신</td></tr>
+        <tr><td class="yellow">53</td><td class="hot">DNS</td><td class="hot">TCP/UDP</td><td>도메인 이름 해석</td></tr>
+        <tr><td class="yellow">67</td><td>DHCP</td><td>UDP</td><td>서버 포트</td></tr>
+        <tr><td class="yellow">68</td><td>DHCP</td><td>UDP</td><td>클라이언트 포트</td></tr>
+        <tr><td class="yellow">69</td><td>TFTP</td><td>UDP</td><td>간이 파일 전송</td></tr>
+        <tr><td class="yellow">80</td><td class="hot">HTTP</td><td>TCP</td><td>웹</td></tr>
+        <tr><td class="yellow">110</td><td class="hot">POP3</td><td>TCP</td><td>메일 수신</td></tr>
+        <tr><td class="yellow">143</td><td class="hot">IMAP</td><td>TCP</td><td>메일 수신(서버 보관)</td></tr>
+        <tr><td class="yellow">161</td><td class="hot">SNMP</td><td class="hot">UDP</td><td>네트워크 관리</td></tr>
+        <tr><td class="yellow">162</td><td>SNMP Trap</td><td>UDP</td><td>-</td></tr>
+        <tr><td class="yellow">443</td><td class="hot">HTTPS</td><td>TCP</td><td>보안 웹</td></tr>
+        <tr><td class="yellow">993</td><td>IMAPS</td><td>TCP</td><td>보안 IMAP</td></tr>
+        <tr><td class="yellow">995</td><td>POP3S</td><td>TCP</td><td>보안 POP3</td></tr>
+        <tr><td class="yellow">6000+</td><td class="hot">X-Window</td><td>TCP</td><td>X윈도 시스템</td></tr>
+      </table>
+    </div>
+    <div class="box box-red">
+      <div class="box-title">⭐ 반드시 암기</div>
+      <ul>
+        <li>DNS = <strong>TCP/UDP 둘 다</strong> (유일하게 둘 다 사용)</li>
+        <li>SNMP = <strong>UDP</strong> (161)</li>
+        <li>DHCP = UDP (67/68)</li>
+        <li>FTP = 20(데이터) + 21(제어) 두 개</li>
+        <li>SSH(22) vs Telnet(23) — SSH가 번호 더 작음, 더 안전</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">UDP 사용 프로토콜</div>
+    <div class="box box-yellow">
+      <div class="box-title">📌 UDP 사용</div>
+      <p><strong>DNS, SNMP, TFTP, DHCP</strong> = UDP</p>
+      <p>나머지 대부분은 TCP</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Telnet vs SSH 비교</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>Telnet</th><th>SSH</th></tr>
+        <tr><td>포트</td><td class="yellow">23</td><td class="yellow">22</td></tr>
+        <tr><td>암호화</td><td class="hot">평문 (보안 취약)</td><td class="green">암호화 (보안)</td></tr>
+        <tr><td>익명 접속</td><td>-u(UDP모드), -l(계정지정)</td><td>anonymous 허용 안함</td></tr>
+        <tr><td>계정 기반 접속</td><td class="mono">telnet -l 계정ID IP</td><td class="mono">ssh -l 아이디 IP<br>ssh 아이디@IP</td></tr>
+        <tr><td>포트 지정</td><td class="mono">telnet IP 포트</td><td class="mono">ssh -p 포트 IP</td></tr>
+        <tr><td>인증 파일</td><td>-</td><td class="mono">/home/[USER]/.ssh/authorized_keys</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>파일</th><th>설명</th></tr>
+        <tr><td class="mono">/etc/motd</td><td>내부/외부 접속 시 로그인 <strong>후</strong> 출력</td></tr>
+        <tr><td class="mono">/etc/issue</td><td>내부(로컬) 접속 시 로그인 <strong>전</strong> 출력</td></tr>
+        <tr><td class="mono">/etc/issue.net</td><td>외부 접속 시 로그인 <strong>전</strong> 출력</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic13.html" class="page-btn">← Topic 13: OSI 7계층</a>
+    <a href="topic15.html" class="page-btn center">Topic 15: LAN & 네트워크 →</a>
+  </div>
+</div>
+</body>
+</html>

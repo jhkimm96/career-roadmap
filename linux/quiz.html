@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기출 퀴즈 — 리눅스마스터 2급</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<style>
+.quiz-wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px}
+.score-bar{background:#161624;border:1px solid #2a2a4a;border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.score-item{text-align:center}
+.score-num{font-size:28px;font-weight:900;color:#e94560}
+.score-label{font-size:12px;color:#7775a0;margin-top:2px}
+.progress{flex:1;min-width:200px}
+.progress-bar{background:#1e1e35;border-radius:8px;height:8px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#e94560,#f97316);height:100%;border-radius:8px;transition:width .4s}
+.progress-text{font-size:12px;color:#7775a0;margin-top:4px}
+
+.q-card{background:#161624;border:1px solid #2a2a4a;border-radius:16px;padding:24px;margin-bottom:20px;transition:border-color .2s}
+.q-card.correct{border-color:#34d399}
+.q-card.wrong{border-color:#e94560}
+.q-num{font-size:11px;font-family:'JetBrains Mono',monospace;color:#7775a0;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.q-tag{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;font-size:11px;padding:2px 8px;border-radius:6px}
+.q-text{font-size:16px;color:#fff;font-weight:500;margin-bottom:20px;line-height:1.6}
+.q-code{background:#0d0d1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#7dd3fc;margin-bottom:16px}
+.opts{display:grid;gap:8px}
+.opt{background:#1e1e35;border:1px solid #3a3a5c;border-radius:10px;padding:12px 16px;cursor:pointer;font-size:14px;color:#e8e6f0;transition:all .15s;display:flex;align-items:center;gap:10px}
+.opt:hover{border-color:#7775a0;background:#252540}
+.opt.selected{border-color:#7dd3fc;background:rgba(125,211,252,.08);color:#7dd3fc}
+.opt.correct-ans{border-color:#34d399!important;background:rgba(52,211,153,.12)!important;color:#34d399!important}
+.opt.wrong-ans{border-color:#e94560!important;background:rgba(233,69,96,.12)!important;color:#e94560!important}
+.opt-icon{width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.explanation{background:#1a1230;border:1px solid rgba(168,85,247,.3);border-radius:10px;padding:12px 16px;margin-top:12px;display:none}
+.explanation.show{display:block}
+.exp-title{font-size:11px;color:#a855f7;font-weight:700;margin-bottom:6px}
+.exp-text{font-size:13px;color:#ddd6fe;line-height:1.6}
+
+.nav-btns{display:flex;gap:10px;margin-top:24px;justify-content:space-between}
+.nav-btn{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;padding:10px 20px;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit}
+.nav-btn:hover{border-color:#e94560;color:#e94560}
+.nav-btn.primary{background:rgba(233,69,96,.15);border-color:rgba(233,69,96,.4);color:#e94560}
+.result-screen{display:none;text-align:center;padding:40px 20px}
+.result-screen.show{display:block}
+.result-big{font-size:64px;margin-bottom:12px}
+.result-score{font-size:48px;font-weight:900;color:#e94560;margin-bottom:8px}
+.result-msg{font-size:16px;color:#9997b8;margin-bottom:32px}
+.restart-btn{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.4);color:#e94560;padding:14px 32px;border-radius:12px;font-size:16px;cursor:pointer;font-family:inherit}
+.restart-btn:hover{background:rgba(233,69,96,.25)}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">🎯 기출 핵심 퀴즈</span>
+  <span class="nav-badge">2022~2023 기출</span>
+</nav>
+
+<div class="quiz-wrap">
+  <div class="score-bar">
+    <div class="score-item"><div class="score-num" id="correct-count">0</div><div class="score-label">정답</div></div>
+    <div class="score-item"><div class="score-num" id="wrong-count" style="color:#7775a0">0</div><div class="score-label">오답</div></div>
+    <div class="progress">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="progress-text" id="prog-text">0 / 40 문제</div>
+    </div>
+  </div>
+
+  <div id="quiz-container"></div>
+  <div id="result-screen" class="result-screen">
+    <div class="result-big" id="result-emoji">🎉</div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <button class="restart-btn" onclick="restart()">🔄 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {q:"umask 값이 0022일 때 새로 생성된 파일의 허가권 값으로 알맞은 것은?",opts:["644","755","666","777"],ans:0,tag:"권한",exp:"파일 기본권한 666 - umask 022 = 644 (rw-r--r--)"},
+  {q:"다음 중 /project 디렉터리에서 파일 생성은 자유로우나 삭제는 본인 파일만 가능하도록 설정하는 명령으로 알맞은 것은?",opts:["chmod g+s /project","chmod g+t /project","chmod o+s /project","chmod o+t /project"],ans:3,tag:"특수권한",exp:"Sticky Bit는 o+t로 설정. 파일 삭제 시 소유자만 가능하게 함"},
+  {q:"/usr/bin/passwd 파일에 설정된 특수권한으로 알맞은 것은?",opts:["Set-GID","Sticky Bit","Set-UID","ACL"],ans:2,tag:"특수권한",exp:"passwd는 일반사용자도 비밀번호 변경 가능하도록 SetUID 설정"},
+  {q:"mke2fs -j /dev/sdb1 실행 결과 생성되는 파일시스템 타입으로 알맞은 것은?",opts:["ext2","ext3","ext4","xfs"],ans:1,tag:"파일시스템",exp:"-j 옵션은 저널링 활성화 → 자동으로 ext3 생성"},
+  {q:"LVM 구성 순서로 알맞은 것은?",opts:["VG → PV → LV","LV → VG → PV","PV → VG → LV","PE → PV → VG"],ans:2,tag:"LVM",exp:"PV(물리볼륨) → VG(볼륨그룹) → LV(논리볼륨) 순서"},
+  {q:"/etc/fstab 파일에서 마운트 옵션을 기록하는 필드는?",opts:["2번째","3번째","4번째","5번째"],ans:2,tag:"fstab",exp:"1:장치명, 2:마운트포인트, 3:타입, 4:옵션, 5:dump, 6:pass"},
+  {q:"XFS 파일시스템 점검 도구로 알맞은 것은?",opts:["fsck","e2fsck","xfs_repair","xfs_check"],ans:2,tag:"파일시스템",exp:"ext계열→fsck/e2fsck, XFS→xfs_repair"},
+  {q:"GNU 프로젝트의 일환으로 만들어진 셸로 알맞은 것은?",opts:["ksh","bash","dash","csh"],ans:1,tag:"셸",exp:"bash(Bourne Again Shell)는 GNU 프로젝트. csh는 빌 조이, ksh는 데이비드 콘"},
+  {q:"Ctrl+C 키 조합으로 발생하는 시그널 번호로 알맞은 것은?",opts:["1","2","9","15"],ans:1,tag:"시그널",exp:"SIGINT(2)=Ctrl+C, SIGKILL(9)=강제종료, SIGTERM(15)=kill 기본"},
+  {q:"kill 명령어를 실행할 때 전달되는 기본 시그널명과 번호로 알맞은 것은?",opts:["SIGKILL, 9","SIGKILL, 15","SIGTERM, 9","SIGTERM, 15"],ans:3,tag:"시그널",exp:"kill 기본 시그널은 SIGTERM(15). 강제종료는 SIGKILL(9)"},
+  {q:"Ctrl+Z 키 조합으로 발생하는 시그널명과 번호로 알맞은 것은?",opts:["SIGSTOP, 19","SIGSTOP, 20","SIGTSTP, 19","SIGTSTP, 20"],ans:3,tag:"시그널",exp:"Ctrl+Z → SIGTSTP(20). SIGSTOP(19)은 SIGCONT 받을 때까지 정지"},
+  {q:"프로세스 우선순위(NI) 값의 범위로 알맞은 것은?",opts:["-20 ~ 20","-20 ~ 19","-19 ~ 19","-19 ~ 20"],ans:1,tag:"프로세스",exp:"NI 범위: -20 ~ 19 (-20이 최고 우선순위, 19가 최저)"},
+  {q:"vi 편집기를 개발한 인물로 알맞은 것은?",opts:["리처드 스톨만","브람 무레나르","빌 조이","제임스 고슬링"],ans:2,tag:"에디터",exp:"vi=빌 조이(BSD), vim=브람 무레나르, emacs=리처드 스톨만"},
+  {q:"vi 편집기에서 모든 windows를 linux로 치환하는 명령으로 알맞은 것은?",opts:[":%s/linux/windows/g",":%s/windows/linux/g",":%s/\\<linux\\>/windows/g",":%s/\\<windows\\>/linux/g"],ans:1,tag:"vi",exp:":%s/찾을내용/바꿀내용/g 형식. g는 전체 치환"},
+  {q:"vi 편집기에서 행번호를 제거하는 명령으로 알맞은 것은?",opts:["set uno","set unnu","set unno","set nonu"],ans:3,tag:"vi",exp:"set nu(줄번호표시), set nonu(줄번호제거)"},
+  {q:"rpm 명령에서 패키지 제거 옵션으로 알맞은 것은?",opts:["-i","-U","-e","-F"],ans:2,tag:"패키지",exp:"rpm -i(설치), -U(업그레이드), -e(제거erase), -F(freshen)"},
+  {q:"의존성이 있는 패키지를 강제로 제거하는 명령으로 알맞은 것은?",opts:["rpm -e httpd --force","rpm -r httpd --nodeps","rpm -e httpd --nodeps","rpm -d httpd --nodeps"],ans:2,tag:"패키지",exp:"rpm -e(제거) --nodeps(의존성 무시) 조합"},
+  {q:"yum 명령을 이용해서 nmap 패키지를 제거하는 명령으로 알맞은 것은?",opts:["yum delete nmap","yum erase nmap","yum remove nmap","yum clean nmap"],ans:2,tag:"패키지",exp:"yum remove 패키지명 (delete/erase는 yum 명령 아님)"},
+  {q:"데비안 계열 리눅스에서 환경설정 파일도 포함해서 패키지를 제거하는 명령은?",opts:["apt-get remove","apt-get purge","apt-get erase","apt-get delete"],ans:1,tag:"패키지",exp:"apt-get purge: 설정파일까지 삭제. remove: 패키지만 삭제"},
+  {q:"소스 파일 설치 단계로 알맞은 것은?",opts:["make→configure→make install","configure→make clean→make install","configure→make→make install","make install→configure→make"],ans:2,tag:"소스설치",exp:"configure(Makefile생성) → make(컴파일) → make install(설치)"},
+  {q:"tar 명령에서 bzip2 압축을 사용하는 옵션으로 알맞은 것은?",opts:["z","j","J","Z"],ans:1,tag:"압축",exp:"z=gzip(.gz), j=bzip2(.bz2), J=xz(.xz), Z=compress(.Z)"},
+  {q:"압축률 높은 순서로 알맞은 것은?",opts:["gz > bz2 > xz","xz > gz > bz2","xz > bz2 > gz","bz2 > gz > xz"],ans:2,tag:"압축",exp:"압축률: compress < gzip < bz2 < xz (xz가 가장 높음)"},
+  {q:"BSD 계열 프린터 명령어 중 프린터 큐의 작업목록을 출력하는 명령으로 알맞은 것은?",opts:["lp","lpr","lpq","lprm"],ans:2,tag:"프린터",exp:"BSD: lpr(요청), lpq(큐목록), lprm(삭제), lpc(컨트롤) / System V: lp, lpstat, cancel"},
+  {q:"리눅스 및 유닉스에서 사운드를 만들고 캡처하는 인터페이스로 표준 유닉스 시스템 콜 기반인 것은?",opts:["ALSA","CUPS","SANE","OSS"],ans:3,tag:"주변장치",exp:"OSS(Open Sound System): 표준 유닉스 시스템 콜(POSIX). ALSA: 리눅스 커널 요소"},
+  {q:"SSH 서버의 변경된 포트번호로 접속하기 위해 사용하는 옵션은?",opts:["-l","-n","-p","-x"],ans:2,tag:"SSH",exp:"ssh -p 포트번호 서버IP"},
+  {q:"OSI 7계층 중 데이터링크 계층의 데이터 전송 단위로 알맞은 것은?",opts:["비트","프레임","패킷","세그먼트"],ans:1,tag:"OSI",exp:"물리=비트, 데이터링크=프레임, 네트워크=패킷, 전송=세그먼트"},
+  {q:"네트워크 계층에서 사용하는 장비로 알맞은 것은?",opts:["허브","브리지","스위치","라우터"],ans:3,tag:"네트워크장비",exp:"리피터/허브=물리, 브리지/스위치=데이터링크, 라우터=네트워크"},
+  {q:"IPv4 C클래스 네트워크 주소 대역으로 알맞은 것은?",opts:["0.0.0.0 ~ 127.255.255.255","128.0.0.0 ~ 191.255.255.255","192.0.0.0 ~ 223.255.255.255","224.0.0.0 ~ 255.255.255.255"],ans:2,tag:"IP",exp:"A클래스: 0~127, B클래스: 128~191, C클래스: 192~223"},
+  {q:"DNS에서 사용하는 포트번호로 알맞은 것은?",opts:["21","22","53","80"],ans:2,tag:"포트",exp:"DNS=53(TCP/UDP), FTP=20/21, SSH=22, HTTP=80"},
+  {q:"UDP 프로토콜과 가장 관련 있는 서비스로 알맞은 것은?",opts:["TELNET","DNS","SMTP","HTTP"],ans:1,tag:"프로토콜",exp:"DNS는 TCP/UDP 모두 사용. SNMP, TFTP, DHCP도 UDP 사용"},
+  {q:"KDE와 가장 관련 깊은 라이브러리로 알맞은 것은?",opts:["GTK+","Xlib","Qt","XCB"],ans:2,tag:"X윈도",exp:"KDE=Qt 라이브러리, GNOME=GTK+(LGPL)"},
+  {q:"X 서버에 접속할 수 있는 클라이언트를 IP 기반으로 허가하는 명령은?",opts:["xauth","xset","xhost","xrandr"],ans:2,tag:"X윈도",exp:"xhost: IP 기반 접근 허가/차단. xauth: MMC 방식 인증"},
+  {q:"IANA에 대한 설명으로 알맞은 것은?",opts:["OSI 7계층을 제정한 기관","ICANN 등장 전 IP주소/도메인 관리 기관","LAN 관련 표준 제정 기관","통신 분야 표준 제정 기관"],ans:1,tag:"기관",exp:"IANA → ICANN이 대체. ISO=OSI제정, IEEE=LAN표준, ITU-T=통신표준"},
+  {q:"고가용성(HA) 클러스터에 대한 설명으로 알맞은 것은?",opts:["고성능 계산을 위한 클러스터","IP 로드밸런싱을 위한 클러스터","지속적인 서비스 제공을 위한 클러스터","베어울프 클러스터의 다른 이름"],ans:2,tag:"클러스터",exp:"HA=고가용성(지속서비스), LVS=부하분산, HPC=고계산용"},
+  {q:"CPU 전가상화 방식을 사용하는 하이퍼바이저로 알맞은 것은?",opts:["Xen","KVM","LXC","Docker"],ans:1,tag:"가상화",exp:"KVM=전가상화, Xen=반가상화+전가상화 모두, VirtualBox=전가상화"},
+  {q:"클라우드 서비스 중 서버/스토리지 등 IT 하드웨어 자원을 빌려주는 서비스는?",opts:["SaaS","PaaS","IaaS","DaaS"],ans:2,tag:"클라우드",exp:"IaaS(하드웨어), PaaS(플랫폼), SaaS(애플리케이션서비스)"},
+  {q:"netstat 명령에서 라우팅 테이블 정보를 출력하는 옵션은?",opts:["-t","-m","-n","-r"],ans:3,tag:"네트워크",exp:"netstat -r: 라우팅테이블, -t: TCP, -n: 숫자로 표시"},
+  {q:"패킷 교환 방식에 대한 설명으로 틀린 것은?",opts:["전송 대역폭이 동적이다","패킷별로 우선순위를 부여할 수 있다","회선 교환 방식보다 지연이 적다","이론상 무제한 수용이 가능하다"],ans:2,tag:"네트워크",exp:"패킷교환은 회선교환보다 지연이 더 발생. 나머지는 모두 맞는 설명"},
+  {q:"X 클라이언트를 원격지로 전송하기 위해 변경하는 환경변수로 알맞은 것은?",opts:["VISUAL","XTERM","DISPLAY","TERM"],ans:2,tag:"X윈도",exp:"DISPLAY 환경변수: export DISPLAY='IP주소:디스플레이번호.스크린번호'"},
+  {q:"시스템 부팅 시 X윈도 모드로 설정하는 명령으로 알맞은 것은?",opts:["systemctl set-default multi-user.target","systemctl set-default graphical.target","systemctl get-default graphical.target","systemctl get-default multi-user.target"],ans:1,tag:"X윈도",exp:"X윈도=graphical.target, 텍스트=multi-user.target"},
+];
+
+let current = 0, score = 0, wrong = 0, answered = [];
+
+function render() {
+  const container = document.getElementById('quiz-container');
+  const q = quizData[current];
+  const isAnswered = answered[current] !== undefined;
+
+  container.innerHTML = `
+    <div class="q-card ${isAnswered ? (answered[current] === q.ans ? 'correct' : 'wrong') : ''}" id="qcard">
+      <div class="q-num">
+        <span>문제 ${current+1} / ${quizData.length}</span>
+        <span class="q-tag">${q.tag}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      ${q.code ? `<div class="q-code">${q.code}</div>` : ''}
+      <div class="opts">
+        ${q.opts.map((o,i) => `
+          <div class="opt ${getOptClass(i)}" onclick="${isAnswered ? '' : `selectAns(${i})`}" id="opt${i}">
+            <span class="opt-icon">${getOptIcon(i, isAnswered, q.ans)}</span>
+            ${o}
+          </div>
+        `).join('')}
+      </div>
+      <div class="explanation ${isAnswered ? 'show' : ''}" id="exp">
+        <div class="exp-title">💡 해설</div>
+        <div class="exp-text">${q.exp}</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="prev()" ${current===0?'disabled':''}>← 이전</button>
+      <button class="nav-btn primary" onclick="next()">${current===quizData.length-1 ? '결과 보기' : '다음 →'}</button>
+    </div>
+  `;
+  updateScore();
+}
+
+function getOptClass(i) {
+  if (answered[current] === undefined) return '';
+  if (i === quizData[current].ans) return 'correct-ans';
+  if (i === answered[current]) return 'wrong-ans';
+  return '';
+}
+
+function getOptIcon(i, isAnswered, ans) {
+  if (!isAnswered) return String.fromCharCode(9312 + i);
+  if (i === ans) return '✓';
+  if (i === answered[current] && answered[current] !== ans) return '✗';
+  return String.fromCharCode(9312 + i);
+}
+
+function selectAns(i) {
+  answered[current] = i;
+  if (i === quizData[current].ans) score++;
+  else wrong++;
+  render();
+}
+
+function updateScore() {
+  document.getElementById('correct-count').textContent = score;
+  document.getElementById('wrong-count').textContent = wrong;
+  const done = answered.filter(a=>a!==undefined).length;
+  document.getElementById('prog-fill').style.width = (done/quizData.length*100)+'%';
+  document.getElementById('prog-text').textContent = `${done} / ${quizData.length} 문제`;
+}
+
+function next() {
+  if (current < quizData.length-1) { current++; render(); }
+  else showResult();
+}
+
+function prev() {
+  if (current > 0) { current--; render(); }
+}
+
+function showResult() {
+  document.getElementById('quiz-container').style.display='none';
+  const rs = document.getElementById('result-screen');
+  rs.classList.add('show');
+  const pct = Math.round(score/quizData.length*100);
+  document.getElementById('result-emoji').textContent = pct>=80?'🎉':pct>=60?'😊':'💪';
+  document.getElementById('result-score').textContent = `${score} / ${quizData.length} (${pct}%)`;
+  document.getElementById('result-msg').textContent = pct>=80?'합격권입니다! 자신감 갖고 시험 보세요!':pct>=60?'조금만 더 복습하면 합격 가능!':'취약 토픽을 다시 복습해보세요';
+}
+
+function restart() {
+  current=0; score=0; wrong=0; answered=[];
+  document.getElementById('quiz-container').style.display='block';
+  document.getElementById('result-screen').classList.remove('show');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
