@@ -3,12 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>기출 퀴즈 — 리눅스마스터 2급</title>
+<title>기출 퀴즈 100선 — 리눅스마스터 2급</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="base.css">
 <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#0d0d14;color:#e8e6f0;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.top-nav{background:#161624;border-bottom:1px solid #2a2a4a;padding:12px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.back-btn{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;text-decoration:none}
+.back-btn:hover{border-color:#e94560;color:#e94560}
+.nav-title{font-size:15px;font-weight:700;color:#fff}
+.nav-badge{background:rgba(233,69,96,0.15);border:1px solid rgba(233,69,96,0.4);color:#e94560;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;margin-left:auto}
 .quiz-wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px}
-.score-bar{background:#161624;border:1px solid #2a2a4a;border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.score-bar{background:#161624;border:1px solid #2a2a4a;border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
 .score-item{text-align:center}
 .score-num{font-size:28px;font-weight:900;color:#e94560}
 .score-label{font-size:12px;color:#7775a0;margin-top:2px}
@@ -16,18 +23,18 @@
 .progress-bar{background:#1e1e35;border-radius:8px;height:8px;overflow:hidden}
 .progress-fill{background:linear-gradient(90deg,#e94560,#f97316);height:100%;border-radius:8px;transition:width .4s}
 .progress-text{font-size:12px;color:#7775a0;margin-top:4px}
-
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filter-btn{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit}
+.filter-btn:hover,.filter-btn.active{background:rgba(233,69,96,.15);border-color:rgba(233,69,96,.4);color:#e94560}
 .q-card{background:#161624;border:1px solid #2a2a4a;border-radius:16px;padding:24px;margin-bottom:20px;transition:border-color .2s}
 .q-card.correct{border-color:#34d399}
 .q-card.wrong{border-color:#e94560}
 .q-num{font-size:11px;font-family:'JetBrains Mono',monospace;color:#7775a0;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .q-tag{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;font-size:11px;padding:2px 8px;border-radius:6px}
-.q-text{font-size:16px;color:#fff;font-weight:500;margin-bottom:20px;line-height:1.6}
-.q-code{background:#0d0d1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#7dd3fc;margin-bottom:16px}
+.q-text{font-size:15px;color:#fff;font-weight:500;margin-bottom:20px;line-height:1.6}
 .opts{display:grid;gap:8px}
-.opt{background:#1e1e35;border:1px solid #3a3a5c;border-radius:10px;padding:12px 16px;cursor:pointer;font-size:14px;color:#e8e6f0;transition:all .15s;display:flex;align-items:center;gap:10px}
+.opt{background:#1e1e35;border:1px solid #3a3a5c;border-radius:10px;padding:12px 16px;cursor:pointer;font-size:14px;color:#e8e6f0;transition:all .15s;display:flex;align-items:center;gap:10px;font-family:inherit;width:100%;text-align:left}
 .opt:hover{border-color:#7775a0;background:#252540}
-.opt.selected{border-color:#7dd3fc;background:rgba(125,211,252,.08);color:#7dd3fc}
 .opt.correct-ans{border-color:#34d399!important;background:rgba(52,211,153,.12)!important;color:#34d399!important}
 .opt.wrong-ans{border-color:#e94560!important;background:rgba(233,69,96,.12)!important;color:#e94560!important}
 .opt-icon{width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
@@ -35,7 +42,6 @@
 .explanation.show{display:block}
 .exp-title{font-size:11px;color:#a855f7;font-weight:700;margin-bottom:6px}
 .exp-text{font-size:13px;color:#ddd6fe;line-height:1.6}
-
 .nav-btns{display:flex;gap:10px;margin-top:24px;justify-content:space-between}
 .nav-btn{background:#1e1e35;border:1px solid #3a3a5c;color:#9997b8;padding:10px 20px;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit}
 .nav-btn:hover{border-color:#e94560;color:#e94560}
@@ -45,25 +51,37 @@
 .result-big{font-size:64px;margin-bottom:12px}
 .result-score{font-size:48px;font-weight:900;color:#e94560;margin-bottom:8px}
 .result-msg{font-size:16px;color:#9997b8;margin-bottom:32px}
-.restart-btn{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.4);color:#e94560;padding:14px 32px;border-radius:12px;font-size:16px;cursor:pointer;font-family:inherit}
+.restart-btn{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.4);color:#e94560;padding:14px 32px;border-radius:12px;font-size:16px;cursor:pointer;font-family:inherit;margin:6px}
 .restart-btn:hover{background:rgba(233,69,96,.25)}
 </style>
 </head>
 <body>
 <nav class="top-nav">
   <a href="index.html" class="back-btn">← 목록</a>
-  <span class="nav-title">🎯 기출 핵심 퀴즈</span>
-  <span class="nav-badge">2022~2023 기출</span>
+  <span class="nav-title">🎯 기출 핵심 퀴즈 100선</span>
+  <span class="nav-badge">2022~2024 기출</span>
 </nav>
-
 <div class="quiz-wrap">
   <div class="score-bar">
     <div class="score-item"><div class="score-num" id="correct-count">0</div><div class="score-label">정답</div></div>
     <div class="score-item"><div class="score-num" id="wrong-count" style="color:#7775a0">0</div><div class="score-label">오답</div></div>
     <div class="progress">
       <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-      <div class="progress-text" id="prog-text">0 / 40 문제</div>
+      <div class="progress-text" id="prog-text">0 / 100 문제</div>
     </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterQuiz('all')">전체</button>
+    <button class="filter-btn" onclick="filterQuiz('권한')">권한</button>
+    <button class="filter-btn" onclick="filterQuiz('파일시스템')">파일시스템</button>
+    <button class="filter-btn" onclick="filterQuiz('셸')">셸</button>
+    <button class="filter-btn" onclick="filterQuiz('프로세스')">프로세스</button>
+    <button class="filter-btn" onclick="filterQuiz('에디터')">에디터</button>
+    <button class="filter-btn" onclick="filterQuiz('패키지')">패키지</button>
+    <button class="filter-btn" onclick="filterQuiz('네트워크')">네트워크</button>
+    <button class="filter-btn" onclick="filterQuiz('X윈도')">X윈도</button>
+    <button class="filter-btn" onclick="filterQuiz('가상화')">가상화</button>
   </div>
 
   <div id="quiz-container"></div>
@@ -72,142 +90,225 @@
     <div class="result-score" id="result-score"></div>
     <div class="result-msg" id="result-msg"></div>
     <button class="restart-btn" onclick="restart()">🔄 다시 풀기</button>
+    <button class="restart-btn" onclick="restartWrong()">❌ 오답만 다시</button>
   </div>
 </div>
 
 <script>
-const quizData = [
-  {q:"umask 값이 0022일 때 새로 생성된 파일의 허가권 값으로 알맞은 것은?",opts:["644","755","666","777"],ans:0,tag:"권한",exp:"파일 기본권한 666 - umask 022 = 644 (rw-r--r--)"},
-  {q:"다음 중 /project 디렉터리에서 파일 생성은 자유로우나 삭제는 본인 파일만 가능하도록 설정하는 명령으로 알맞은 것은?",opts:["chmod g+s /project","chmod g+t /project","chmod o+s /project","chmod o+t /project"],ans:3,tag:"특수권한",exp:"Sticky Bit는 o+t로 설정. 파일 삭제 시 소유자만 가능하게 함"},
-  {q:"/usr/bin/passwd 파일에 설정된 특수권한으로 알맞은 것은?",opts:["Set-GID","Sticky Bit","Set-UID","ACL"],ans:2,tag:"특수권한",exp:"passwd는 일반사용자도 비밀번호 변경 가능하도록 SetUID 설정"},
-  {q:"mke2fs -j /dev/sdb1 실행 결과 생성되는 파일시스템 타입으로 알맞은 것은?",opts:["ext2","ext3","ext4","xfs"],ans:1,tag:"파일시스템",exp:"-j 옵션은 저널링 활성화 → 자동으로 ext3 생성"},
-  {q:"LVM 구성 순서로 알맞은 것은?",opts:["VG → PV → LV","LV → VG → PV","PV → VG → LV","PE → PV → VG"],ans:2,tag:"LVM",exp:"PV(물리볼륨) → VG(볼륨그룹) → LV(논리볼륨) 순서"},
-  {q:"/etc/fstab 파일에서 마운트 옵션을 기록하는 필드는?",opts:["2번째","3번째","4번째","5번째"],ans:2,tag:"fstab",exp:"1:장치명, 2:마운트포인트, 3:타입, 4:옵션, 5:dump, 6:pass"},
+const allQuiz = [
+  // ===== 권한 (1~20) =====
+  {q:"umask 값이 0022일 때 새로 생성된 파일의 허가권으로 알맞은 것은?",opts:["644","755","666","777"],ans:0,tag:"권한",exp:"파일 기본권한 666 - umask 022 = 644 (rw-r--r--)"},
+  {q:"umask 값이 0002일 때 생성된 디렉터리의 허가권으로 알맞은 것은?",opts:["775","755","664","644"],ans:0,tag:"권한",exp:"디렉터리 기본권한 777 - umask 002 = 775 (rwxrwxr-x)"},
+  {q:"/project 디렉터리에서 파일 삭제는 본인 파일만 가능하도록 설정하는 명령은?",opts:["chmod g+s /project","chmod g+t /project","chmod o+s /project","chmod o+t /project"],ans:3,tag:"권한",exp:"Sticky Bit(o+t): 파일 삭제 시 소유자만 가능"},
+  {q:"/usr/bin/passwd에 설정된 특수권한으로 알맞은 것은?",opts:["Set-GID","Sticky Bit","Set-UID","ACL"],ans:2,tag:"권한",exp:"passwd는 일반사용자도 비밀번호 변경 가능하도록 SetUID 설정"},
+  {q:"파일 생성 시 자동으로 그룹 소유권이 디렉터리 그룹으로 설정되게 하려면?",opts:["Sticky Bit","Set-UID","Set-GID","chmod o+t"],ans:2,tag:"권한",exp:"SetGID를 디렉터리에 설정하면 파일 생성 시 그룹 자동 부여"},
+  {q:"chmod 3770 /project 에서 3이 의미하는 특수권한 조합은?",opts:["SetUID + SetGID","SetUID + Sticky Bit","SetGID + Sticky Bit","SetUID + SetGID + Sticky Bit"],ans:2,tag:"권한",exp:"Sticky Bit(1) + SetGID(2) = 3"},
+  {q:"다음 중 chown 명령어로 lin.txt 소유자=ihduser, 그룹=kait로 변경하는 명령은?",opts:["chown kait:ihduser lin.txt","chown ihduser:kait lin.txt","chgrp ihduser:kait lin.txt","chgrp kait:ihduser lin.txt"],ans:1,tag:"권한",exp:"chown 소유자:그룹 파일명 형식"},
+  {q:"chmod a=rx file 명령의 결과로 알맞은 것은?",opts:["rwxrwxrwx","r-xr-xr-x","rw-rw-rw-","rwxr-xr-x"],ans:1,tag:"권한",exp:"a=rx: 모든 사용자(a)에게 읽기(r)와 실행(x)만 설정"},
+  {q:"ls -l 출력에서 첫 글자가 'd'인 파일의 유형으로 알맞은 것은?",opts:["일반 파일","디렉터리","심볼릭 링크","블록 파일"],ans:1,tag:"권한",exp:"-=일반파일, d=디렉터리, l=심볼릭링크, b=블록장치"},
+  {q:"SetUID의 숫자값으로 알맞은 것은?",opts:["1000","2000","3000","4000"],ans:3,tag:"권한",exp:"SetUID=4000, SetGID=2000, Sticky Bit=1000"},
+  {q:"chgrp -h 명령의 역할로 알맞은 것은?",opts:["하위 디렉터리 포함 변경","심볼릭 링크 파일의 그룹 변경","도움말 출력","그룹 목록 확인"],ans:1,tag:"권한",exp:"chgrp -h: 심볼릭 링크 파일의 그룹 소유권 변경"},
+  {q:"실행파일에 SetUID 설정 시 표시되는 기호로 알맞은 것은?",opts:["S (대문자)","s (소문자)","t","T"],ans:1,tag:"권한",exp:"실행 가능한 파일에 특수권한 설정 시 소문자(s,t), 실행 불가 시 대문자(S,T)"},
+  {q:"파일의 기본 허가권 값으로 알맞은 것은?",opts:["644","755","666","777"],ans:2,tag:"권한",exp:"파일 기본권한=666, 디렉터리 기본권한=777"},
+  {q:"chown :root test 명령의 결과로 알맞은 것은?",opts:["소유자를 root로 변경","그룹을 root로 변경","소유자와 그룹 모두 root로 변경","오류 발생"],ans:1,tag:"권한",exp:"chown :그룹명 → 그룹 소유권만 변경"},
+  {q:"chmod -R o+w TST 명령의 의미로 알맞은 것은?",opts:["TST 파일에 기타 사용자 쓰기 권한 추가","TST와 하위 모든 파일에 기타 사용자 쓰기 권한 추가","TST 소유자에게 쓰기 권한 제거","TST 그룹에 쓰기 권한 추가"],ans:1,tag:"권한",exp:"-R: 하위 디렉터리 포함, o+w: 기타 사용자 쓰기 추가"},
+  {q:"umask -S 옵션의 역할로 알맞은 것은?",opts:["umask를 숫자로 표기","umask 값을 문자로 표기","umask 값 초기화","시스템 umask 설정"],ans:1,tag:"권한",exp:"-S: umask 값을 문자 형식으로 표기"},
+  {q:"edquota -p bookmark ihd 명령에서 -p 옵션의 의미는?",opts:["패스워드 설정","다른 사용자와 동일하게 설정","프로토타입 삭제","파티션 지정"],ans:1,tag:"권한",exp:"-p: 디스크 할당량을 다른 사용자(bookmark)와 동일하게 설정"},
+  {q:"setquota 명령으로 직접 디스크 사용량 할당 시 사용하는 옵션은?",opts:["-g","-u","-a","-f"],ans:1,tag:"권한",exp:"setquota -u 계정명 [블록soft] [블록hard] [inode soft] [inode hard]"},
+  {q:"Sticky Bit는 주로 어디에 사용하는가?",opts:["실행 파일","일반 파일","디렉터리","심볼릭 링크"],ans:2,tag:"권한",exp:"Sticky Bit는 주로 공용 디렉터리(/tmp 등)에 사용"},
+  {q:"ls -l /usr/bin/passwd 실행 시 나타나는 특수권한 표시로 알맞은 것은?",opts:["-rwxr-xr-x","-rwsr-xr-x","-rwxr-sr-x","-rwxr-xr-t"],ans:1,tag:"권한",exp:"소유자 실행 권한 자리에 s → SetUID 설정됨"},
+
+  // ===== 파일시스템 (21~35) =====
+  {q:"mke2fs -j /dev/sdb1 실행 결과 생성되는 파일시스템은?",opts:["ext2","ext3","ext4","xfs"],ans:1,tag:"파일시스템",exp:"-j 옵션은 저널링 활성화 → 자동으로 ext3 생성"},
+  {q:"LVM 구성 순서로 알맞은 것은?",opts:["VG→PV→LV","LV→VG→PV","PV→VG→LV","PE→PV→VG"],ans:2,tag:"파일시스템",exp:"PV(물리볼륨) → VG(볼륨그룹) → LV(논리볼륨)"},
+  {q:"/etc/fstab 파일에서 마운트 옵션을 기록하는 필드는?",opts:["2번째","3번째","4번째","5번째"],ans:2,tag:"파일시스템",exp:"1:장치명, 2:마운트포인트, 3:타입, 4:옵션, 5:dump, 6:pass"},
   {q:"XFS 파일시스템 점검 도구로 알맞은 것은?",opts:["fsck","e2fsck","xfs_repair","xfs_check"],ans:2,tag:"파일시스템",exp:"ext계열→fsck/e2fsck, XFS→xfs_repair"},
-  {q:"GNU 프로젝트의 일환으로 만들어진 셸로 알맞은 것은?",opts:["ksh","bash","dash","csh"],ans:1,tag:"셸",exp:"bash(Bourne Again Shell)는 GNU 프로젝트. csh는 빌 조이, ksh는 데이비드 콘"},
-  {q:"Ctrl+C 키 조합으로 발생하는 시그널 번호로 알맞은 것은?",opts:["1","2","9","15"],ans:1,tag:"시그널",exp:"SIGINT(2)=Ctrl+C, SIGKILL(9)=강제종료, SIGTERM(15)=kill 기본"},
-  {q:"kill 명령어를 실행할 때 전달되는 기본 시그널명과 번호로 알맞은 것은?",opts:["SIGKILL, 9","SIGKILL, 15","SIGTERM, 9","SIGTERM, 15"],ans:3,tag:"시그널",exp:"kill 기본 시그널은 SIGTERM(15). 강제종료는 SIGKILL(9)"},
-  {q:"Ctrl+Z 키 조합으로 발생하는 시그널명과 번호로 알맞은 것은?",opts:["SIGSTOP, 19","SIGSTOP, 20","SIGTSTP, 19","SIGTSTP, 20"],ans:3,tag:"시그널",exp:"Ctrl+Z → SIGTSTP(20). SIGSTOP(19)은 SIGCONT 받을 때까지 정지"},
-  {q:"프로세스 우선순위(NI) 값의 범위로 알맞은 것은?",opts:["-20 ~ 20","-20 ~ 19","-19 ~ 19","-19 ~ 20"],ans:1,tag:"프로세스",exp:"NI 범위: -20 ~ 19 (-20이 최고 우선순위, 19가 최저)"},
+  {q:"현재 마운트된 파일시스템 정보를 저장하는 파일은?",opts:["/etc/fstab","/etc/mtab","/etc/mounts","/proc/partitions"],ans:1,tag:"파일시스템",exp:"/etc/mtab: 현재 마운트된 파일시스템 정보"},
+  {q:"파티션 UUID와 파일시스템 정보를 확인하는 명령어는?",opts:["lsblk","blkid","fdisk -l","df -T"],ans:1,tag:"파일시스템",exp:"blkid: 하드디스크 파티션의 UUID와 파일시스템 정보 확인"},
+  {q:"mount -t ext4 /dev/sdb1 /data 에서 -t 옵션의 의미는?",opts:["마운트 해제","파일시스템 유형 지정","옵션 설정","타입 확인"],ans:1,tag:"파일시스템",exp:"-t: 파일시스템 유형(type)을 지정"},
+  {q:"블록 장치 정보를 트리 형식으로 보여주는 명령어는?",opts:["blkid","lsblk","fdisk","df"],ans:1,tag:"파일시스템",exp:"lsblk: 블록 장치에 대한 정보를 트리 형식으로 표시"},
+  {q:"디렉터리별 디스크 사용량을 확인하는 명령어는?",opts:["df","du","quota","mount"],ans:1,tag:"파일시스템",exp:"du(disk usage): 디렉터리별 사용량 / df: 파티션별 남은 용량"},
+  {q:"fdisk 실행 상태에서 파티션 삭제 시 사용하는 명령은?",opts:["d","r","e","x"],ans:0,tag:"파일시스템",exp:"fdisk: d=삭제, n=새파티션, w=저장, q=종료"},
+  {q:"저널링 파일시스템으로 틀린 것은?",opts:["ext3","XFS","ReiserFS","ext2"],ans:3,tag:"파일시스템",exp:"ext2는 저널링 없음. 저널링: ext3, ext4, XFS, ReiserFS, JFS"},
+  {q:"/etc/fstab 6번째 필드의 역할은?",opts:["마운트 옵션","백업 여부","fsck 검사 순서","파일시스템 타입"],ans:2,tag:"파일시스템",exp:"6번째 pass: fsck 검사 순서(0=안함, 1=루트, 2=나머지)"},
+  {q:"원격 윈도우 공유폴더 마운트 시 사용하는 파일시스템 타입은?",opts:["ntfs","cifs","samba","xfs"],ans:1,tag:"파일시스템",exp:"cifs: SMB의 확장, 윈도우 공유 폴더 마운트에 사용"},
+  {q:"df -T 옵션의 역할은?",opts:["사람이 읽기 쉬운 단위","파일시스템 유형 확인","0블록 포함 출력","파티션 크기"],ans:1,tag:"파일시스템",exp:"-T: 해당 파티션의 파일시스템 유형(type) 확인"},
+  {q:"RAID-5에서 10GB 디스크 4개 사용 시 실제 사용 가능한 용량은?",opts:["10GB","20GB","30GB","40GB"],ans:2,tag:"파일시스템",exp:"RAID-5: (n-1) × 디스크용량 = 3 × 10GB = 30GB"},
+
+  // ===== 셸 (36~50) =====
+  {q:"GNU 프로젝트의 일환으로 만들어진 셸로 알맞은 것은?",opts:["ksh","bash","dash","csh"],ans:1,tag:"셸",exp:"bash(Bourne Again Shell)는 GNU 프로젝트. csh=빌 조이, ksh=데이비드 콘"},
+  {q:"현재 사용 중인 셸을 확인하는 명령으로 알맞은 것은?",opts:["cat SHELL","echo SHELL","echo $SHELL","cat $SHELL"],ans:2,tag:"셸",exp:"echo $SHELL: 현재 로그인 후 사용 중인 셸 확인"},
+  {q:"사용 가능한 셸 목록이 저장된 파일은?",opts:["/etc/passwd","/etc/shells","~/.bashrc","~/.bash_profile"],ans:1,tag:"셸",exp:"/etc/shells: 시스템에서 사용 가능한 셸 목록"},
+  {q:"모든 사용자에게 적용되는 alias와 함수 설정 파일은?",opts:["/etc/profile","/etc/bashrc","~/.bashrc","~/.bash_profile"],ans:1,tag:"셸",exp:"/etc/bashrc: 모든 사용자에게 적용되는 alias와 함수 설정"},
+  {q:"개인 사용자의 PATH 같은 환경변수를 변경할 때 사용하는 파일은?",opts:["~/.bashrc","~/.bash_profile","/etc/profile","/etc/bashrc"],ans:1,tag:"셸",exp:"~/.bash_profile: 개인 사용자의 환경변수(PATH 등) 설정"},
+  {q:"가장 최근에 실행한 명령을 재실행하는 history 명령은?",opts:["!0","!1","!!","!-1"],ans:2,tag:"셸",exp:"!!: 마지막으로 실행한 명령 재실행"},
+  {q:"!?al 명령의 의미로 알맞은 것은?",opts:["al로 시작하는 가장 최근 명령","al을 포함하는 가장 최근 명령","al로 끝나는 명령","1번째 명령 실행"],ans:1,tag:"셸",exp:"!?문자열: 가장 최근에 문자열을 포함하는 명령 실행"},
+  {q:"HISTSIZE 환경변수의 역할은?",opts:["히스토리 파일 위치","히스토리 파일 크기","히스토리 스택 크기","히스토리 시간 형식"],ans:2,tag:"셸",exp:"HISTSIZE: 메모리(스택)에 저장되는 히스토리 개수"},
+  {q:"셸 변수와 함수를 출력하는 명령으로 알맞은 것은?",opts:["env","printenv","set","unset"],ans:2,tag:"셸",exp:"set: 선언된 셸 변수 및 함수 출력 / env: 환경변수만 출력"},
+  {q:"PS1 환경변수의 역할은?",opts:["2차 프롬프트 변경","1차 프롬프트 모양 결정","로그아웃 시간 제어","터미널 종류"],ans:1,tag:"셸",exp:"PS1: 셸 프롬프트(1차) 모양 결정 / PS2: 명령 연장 시 2차 프롬프트"},
+  {q:"chsh -s /bin/bash 명령의 역할은?",opts:["bash 셸 설치","로그인 셸을 bash로 변경","bash 버전 확인","bash 목록 출력"],ans:1,tag:"셸",exp:"chsh -s: 사용자의 기본(로그인) 셸을 변경"},
+  {q:"PS1 형식에서 현재 작업 디렉터리 절대경로를 표시하는 특수문자는?",opts:["\\W","\\w","\\h","\\u"],ans:1,tag:"셸",exp:"\\w: 절대경로 / \\W: 마지막 디렉터리명만 / \\h: 호스트명 / \\u: 사용자명"},
+  {q:"ls에 alias 설정 시 원래 ls 명령 실행 방법으로 알맞은 것은?",opts:["!ls","$ls","\\ls","/ls"],ans:2,tag:"셸",exp:"\\명령어: alias를 무시하고 원래 명령어 실행"},
+  {q:"선언된 환경변수를 제거하는 명령으로 알맞은 것은?",opts:["env","set","printenv","unset"],ans:3,tag:"셸",exp:"unset: 지정된 환경변수나 함수를 제거"},
+  {q:"C셸을 개발한 인물로 알맞은 것은?",opts:["스티븐 본","데이비드 콘","빌 조이","브라이언 폭스"],ans:2,tag:"셸",exp:"C셸(csh): 버클리대학 빌 조이 개발. bash: 브라이언 폭스(GNU)"},
+
+  // ===== 프로세스/시그널 (51~65) =====
+  {q:"Ctrl+C로 발생하는 시그널 번호로 알맞은 것은?",opts:["1","2","9","15"],ans:1,tag:"프로세스",exp:"SIGINT(2)=Ctrl+C, SIGKILL(9)=강제종료, SIGTERM(15)=kill 기본"},
+  {q:"kill 명령의 기본 시그널명과 번호로 알맞은 것은?",opts:["SIGKILL,9","SIGKILL,15","SIGTERM,9","SIGTERM,15"],ans:3,tag:"프로세스",exp:"kill 기본 시그널: SIGTERM(15) 정상종료 시도"},
+  {q:"Ctrl+Z로 발생하는 시그널명과 번호로 알맞은 것은?",opts:["SIGSTOP,19","SIGSTOP,20","SIGTSTP,19","SIGTSTP,20"],ans:3,tag:"프로세스",exp:"Ctrl+Z → SIGTSTP(20): 프로세스 대기(suspend)로 전환"},
+  {q:"NI 값의 범위로 알맞은 것은?",opts:["-20~20","-20~19","-19~19","-19~20"],ans:1,tag:"프로세스",exp:"NI 범위: -20~19. -20이 최고우선순위, 19가 최저"},
+  {q:"fork()와 exec()의 차이로 알맞은 것은?",opts:["fork=교체, exec=복제","fork=복제, exec=교체","둘 다 복제","둘 다 교체"],ans:1,tag:"프로세스",exp:"fork(): 복제하여 자식 프로세스 생성 / exec(): 호출 프로세스를 새 프로세스로 교체"},
+  {q:"standalone 데몬의 특징으로 알맞은 것은?",opts:["필요할 때만 실행","메모리 효율적","항상 메모리 상주","inetd가 관리"],ans:2,tag:"프로세스",exp:"standalone: 항상 메모리 상주, 빈번한 요청에 적합"},
+  {q:"ps aux 명령에서 Z 상태의 의미는?",opts:["실행 중","정지된 상태","좀비 프로세스","디스크 대기"],ans:2,tag:"프로세스",exp:"Z: 좀비(Zombie) - 종료되었으나 부모 프로세스에 회수 안된 상태"},
+  {q:"실행 중인 프로세스의 우선순위를 변경하는 명령어는?",opts:["nice","renice","top","ps"],ans:1,tag:"프로세스",exp:"renice: 실행 중인 프로세스의 NI값 변경(PID 사용) / nice: 새 프로세스 시작 시"},
+  {q:"포그라운드 작업을 백그라운드로 전환하는 순서로 알맞은 것은?",opts:["bg → Ctrl+Z","Ctrl+C → bg","Ctrl+Z → bg","fg → Ctrl+Z"],ans:2,tag:"프로세스",exp:"Ctrl+Z(일시중지) → bg 명령 수행"},
+  {q:"프로세스 이름으로 종료하는 명령어는?",opts:["kill","pkill","killall","fuser"],ans:2,tag:"프로세스",exp:"killall: 프로세스 이름으로 종료 / kill: PID로 종료"},
+  {q:"백그라운드 작업 목록을 확인하는 명령어는?",opts:["ps","bg","fg","jobs"],ans:3,tag:"프로세스",exp:"jobs: 백그라운드/중지된 작업 목록 확인"},
+  {q:"nohup 명령의 역할로 알맞은 것은?",opts:["프로세스 강제종료","터미널 닫혀도 프로세스 계속 실행","프로세스 일시중지","우선순위 변경"],ans:1,tag:"프로세스",exp:"nohup: no hang up. 터미널이 닫혀도 백그라운드로 계속 실행"},
+  {q:"top 명령에서 NI값을 조절할 때 사용하는 키는?",opts:["k","n","r","s"],ans:2,tag:"프로세스",exp:"top 실행 중: k=kill, n=개수지정, r=NI값변경, s=갱신시간, q=종료"},
+  {q:"cron 관련 파일로 알맞은 것은?",opts:["/etc/crond","/etc/crontab","/etc/cron","/var/crontab"],ans:1,tag:"프로세스",exp:"cron 데몬: crond / 관련 파일: /etc/crontab"},
+  {q:"kill %2 명령의 의미로 알맞은 것은?",opts:["PID 2 프로세스 종료","작업번호 2번 백그라운드 종료","2번 시그널 전송","PID 2에 kill 전송"],ans:1,tag:"프로세스",exp:"kill %작업번호: 해당 작업번호의 백그라운드 작업 종료"},
+
+  // ===== 에디터 (66~75) =====
   {q:"vi 편집기를 개발한 인물로 알맞은 것은?",opts:["리처드 스톨만","브람 무레나르","빌 조이","제임스 고슬링"],ans:2,tag:"에디터",exp:"vi=빌 조이(BSD), vim=브람 무레나르, emacs=리처드 스톨만"},
-  {q:"vi 편집기에서 모든 windows를 linux로 치환하는 명령으로 알맞은 것은?",opts:[":%s/linux/windows/g",":%s/windows/linux/g",":%s/\\<linux\\>/windows/g",":%s/\\<windows\\>/linux/g"],ans:1,tag:"vi",exp:":%s/찾을내용/바꿀내용/g 형식. g는 전체 치환"},
-  {q:"vi 편집기에서 행번호를 제거하는 명령으로 알맞은 것은?",opts:["set uno","set unnu","set unno","set nonu"],ans:3,tag:"vi",exp:"set nu(줄번호표시), set nonu(줄번호제거)"},
-  {q:"rpm 명령에서 패키지 제거 옵션으로 알맞은 것은?",opts:["-i","-U","-e","-F"],ans:2,tag:"패키지",exp:"rpm -i(설치), -U(업그레이드), -e(제거erase), -F(freshen)"},
-  {q:"의존성이 있는 패키지를 강제로 제거하는 명령으로 알맞은 것은?",opts:["rpm -e httpd --force","rpm -r httpd --nodeps","rpm -e httpd --nodeps","rpm -d httpd --nodeps"],ans:2,tag:"패키지",exp:"rpm -e(제거) --nodeps(의존성 무시) 조합"},
-  {q:"yum 명령을 이용해서 nmap 패키지를 제거하는 명령으로 알맞은 것은?",opts:["yum delete nmap","yum erase nmap","yum remove nmap","yum clean nmap"],ans:2,tag:"패키지",exp:"yum remove 패키지명 (delete/erase는 yum 명령 아님)"},
-  {q:"데비안 계열 리눅스에서 환경설정 파일도 포함해서 패키지를 제거하는 명령은?",opts:["apt-get remove","apt-get purge","apt-get erase","apt-get delete"],ans:1,tag:"패키지",exp:"apt-get purge: 설정파일까지 삭제. remove: 패키지만 삭제"},
-  {q:"소스 파일 설치 단계로 알맞은 것은?",opts:["make→configure→make install","configure→make clean→make install","configure→make→make install","make install→configure→make"],ans:2,tag:"소스설치",exp:"configure(Makefile생성) → make(컴파일) → make install(설치)"},
-  {q:"tar 명령에서 bzip2 압축을 사용하는 옵션으로 알맞은 것은?",opts:["z","j","J","Z"],ans:1,tag:"압축",exp:"z=gzip(.gz), j=bzip2(.bz2), J=xz(.xz), Z=compress(.Z)"},
-  {q:"압축률 높은 순서로 알맞은 것은?",opts:["gz > bz2 > xz","xz > gz > bz2","xz > bz2 > gz","bz2 > gz > xz"],ans:2,tag:"압축",exp:"압축률: compress < gzip < bz2 < xz (xz가 가장 높음)"},
-  {q:"BSD 계열 프린터 명령어 중 프린터 큐의 작업목록을 출력하는 명령으로 알맞은 것은?",opts:["lp","lpr","lpq","lprm"],ans:2,tag:"프린터",exp:"BSD: lpr(요청), lpq(큐목록), lprm(삭제), lpc(컨트롤) / System V: lp, lpstat, cancel"},
-  {q:"리눅스 및 유닉스에서 사운드를 만들고 캡처하는 인터페이스로 표준 유닉스 시스템 콜 기반인 것은?",opts:["ALSA","CUPS","SANE","OSS"],ans:3,tag:"주변장치",exp:"OSS(Open Sound System): 표준 유닉스 시스템 콜(POSIX). ALSA: 리눅스 커널 요소"},
-  {q:"SSH 서버의 변경된 포트번호로 접속하기 위해 사용하는 옵션은?",opts:["-l","-n","-p","-x"],ans:2,tag:"SSH",exp:"ssh -p 포트번호 서버IP"},
-  {q:"OSI 7계층 중 데이터링크 계층의 데이터 전송 단위로 알맞은 것은?",opts:["비트","프레임","패킷","세그먼트"],ans:1,tag:"OSI",exp:"물리=비트, 데이터링크=프레임, 네트워크=패킷, 전송=세그먼트"},
-  {q:"네트워크 계층에서 사용하는 장비로 알맞은 것은?",opts:["허브","브리지","스위치","라우터"],ans:3,tag:"네트워크장비",exp:"리피터/허브=물리, 브리지/스위치=데이터링크, 라우터=네트워크"},
-  {q:"IPv4 C클래스 네트워크 주소 대역으로 알맞은 것은?",opts:["0.0.0.0 ~ 127.255.255.255","128.0.0.0 ~ 191.255.255.255","192.0.0.0 ~ 223.255.255.255","224.0.0.0 ~ 255.255.255.255"],ans:2,tag:"IP",exp:"A클래스: 0~127, B클래스: 128~191, C클래스: 192~223"},
-  {q:"DNS에서 사용하는 포트번호로 알맞은 것은?",opts:["21","22","53","80"],ans:2,tag:"포트",exp:"DNS=53(TCP/UDP), FTP=20/21, SSH=22, HTTP=80"},
-  {q:"UDP 프로토콜과 가장 관련 있는 서비스로 알맞은 것은?",opts:["TELNET","DNS","SMTP","HTTP"],ans:1,tag:"프로토콜",exp:"DNS는 TCP/UDP 모두 사용. SNMP, TFTP, DHCP도 UDP 사용"},
-  {q:"KDE와 가장 관련 깊은 라이브러리로 알맞은 것은?",opts:["GTK+","Xlib","Qt","XCB"],ans:2,tag:"X윈도",exp:"KDE=Qt 라이브러리, GNOME=GTK+(LGPL)"},
-  {q:"X 서버에 접속할 수 있는 클라이언트를 IP 기반으로 허가하는 명령은?",opts:["xauth","xset","xhost","xrandr"],ans:2,tag:"X윈도",exp:"xhost: IP 기반 접근 허가/차단. xauth: MMC 방식 인증"},
-  {q:"IANA에 대한 설명으로 알맞은 것은?",opts:["OSI 7계층을 제정한 기관","ICANN 등장 전 IP주소/도메인 관리 기관","LAN 관련 표준 제정 기관","통신 분야 표준 제정 기관"],ans:1,tag:"기관",exp:"IANA → ICANN이 대체. ISO=OSI제정, IEEE=LAN표준, ITU-T=통신표준"},
-  {q:"고가용성(HA) 클러스터에 대한 설명으로 알맞은 것은?",opts:["고성능 계산을 위한 클러스터","IP 로드밸런싱을 위한 클러스터","지속적인 서비스 제공을 위한 클러스터","베어울프 클러스터의 다른 이름"],ans:2,tag:"클러스터",exp:"HA=고가용성(지속서비스), LVS=부하분산, HPC=고계산용"},
-  {q:"CPU 전가상화 방식을 사용하는 하이퍼바이저로 알맞은 것은?",opts:["Xen","KVM","LXC","Docker"],ans:1,tag:"가상화",exp:"KVM=전가상화, Xen=반가상화+전가상화 모두, VirtualBox=전가상화"},
-  {q:"클라우드 서비스 중 서버/스토리지 등 IT 하드웨어 자원을 빌려주는 서비스는?",opts:["SaaS","PaaS","IaaS","DaaS"],ans:2,tag:"클라우드",exp:"IaaS(하드웨어), PaaS(플랫폼), SaaS(애플리케이션서비스)"},
-  {q:"netstat 명령에서 라우팅 테이블 정보를 출력하는 옵션은?",opts:["-t","-m","-n","-r"],ans:3,tag:"네트워크",exp:"netstat -r: 라우팅테이블, -t: TCP, -n: 숫자로 표시"},
-  {q:"패킷 교환 방식에 대한 설명으로 틀린 것은?",opts:["전송 대역폭이 동적이다","패킷별로 우선순위를 부여할 수 있다","회선 교환 방식보다 지연이 적다","이론상 무제한 수용이 가능하다"],ans:2,tag:"네트워크",exp:"패킷교환은 회선교환보다 지연이 더 발생. 나머지는 모두 맞는 설명"},
-  {q:"X 클라이언트를 원격지로 전송하기 위해 변경하는 환경변수로 알맞은 것은?",opts:["VISUAL","XTERM","DISPLAY","TERM"],ans:2,tag:"X윈도",exp:"DISPLAY 환경변수: export DISPLAY='IP주소:디스플레이번호.스크린번호'"},
-  {q:"시스템 부팅 시 X윈도 모드로 설정하는 명령으로 알맞은 것은?",opts:["systemctl set-default multi-user.target","systemctl set-default graphical.target","systemctl get-default graphical.target","systemctl get-default multi-user.target"],ans:1,tag:"X윈도",exp:"X윈도=graphical.target, 텍스트=multi-user.target"},
+  {q:"vi 편집기에서 저장하지 않고 강제 종료하는 명령은?",opts:[":w!",":q!",":x!",":e!"],ans:1,tag:"에디터",exp:":q! 저장 없이 강제종료 / :wq 저장하고 종료"},
+  {q:"vi 편집기에서 모든 windows를 linux로 치환하는 명령은?",opts:[":%s/linux/windows/g",":%s/windows/linux/g",":%s/\\<linux\\>/windows/g",":%s/\\<windows\\>/linux/g"],ans:1,tag:"에디터",exp:":%s/찾을내용/바꿀내용/g 형식"},
+  {q:"vi 편집기에서 행번호를 제거하는 ex 모드 명령은?",opts:["set uno","set unnu","set unno","set nonu"],ans:3,tag:"에디터",exp:"set nu(줄번호표시) / set nonu(줄번호제거)"},
+  {q:"vi 편집기 실행 시 자동으로 행번호 표시되도록 설정하는 파일은?",opts:[".virc",".vimrc",".exrc",".vimex"],ans:2,tag:"에디터",exp:".exrc: vi 편집기 환경설정 등록 파일 (set nu 추가)"},
+  {q:"emacs 편집기를 개발한 인물로 알맞은 것은?",opts:["빌 조이","리처드 스톨만","브람 무레나르","Aboil Kasar"],ans:1,tag:"에디터",exp:"emacs: 리처드 스톨만, LISP 기반, 비모드형 편집기"},
+  {q:"pico를 기반으로 GNU 프로젝트에서 만든 편집기는?",opts:["vim","gedit","nano","emacs"],ans:2,tag:"에디터",exp:"nano: pico 기반, GNU 프로젝트 관리, 자유소프트웨어"},
+  {q:"X윈도 환경에서만 사용 가능한 편집기로 알맞은 것은?",opts:["nano","pico","emacs","gedit"],ans:3,tag:"에디터",exp:"gedit: 그놈 데스크톱 환경용, X윈도 전용 (텔넷 접속 시 사용 불가)"},
+  {q:"vi 편집기에서 현재 줄 한 라인을 삭제하는 명령모드 명령은?",opts:["yy","dd","pp","xx"],ans:1,tag:"에디터",exp:"dd: 현재 줄 삭제 / yy: 현재 줄 복사 / p: 붙여넣기"},
+  {q:"줄의 시작을 의미하는 vi 치환 정규표현식 기호는?",opts:["$","^","\\<","\\>"],ans:1,tag:"에디터",exp:"^: 줄의 시작 / $: 줄의 끝 / \\<: 단어 시작 / \\>: 단어 끝"},
+
+  // ===== 패키지/압축 (76~85) =====
+  {q:"rpm 명령에서 패키지 제거 옵션으로 알맞은 것은?",opts:["-i","-U","-e","-F"],ans:2,tag:"패키지",exp:"rpm -i(설치), -U(업그레이드), -e(제거), -F(freshen)"},
+  {q:"의존성 있는 패키지를 강제 제거하는 명령으로 알맞은 것은?",opts:["rpm -e httpd --force","rpm -e httpd --nodeps","rpm -r httpd --nodeps","rpm -d httpd --nodeps"],ans:1,tag:"패키지",exp:"rpm -e(제거) --nodeps(의존성 무시) 조합"},
+  {q:"데비안에서 설정파일까지 모두 제거하는 명령은?",opts:["apt-get remove","apt-get purge","apt-get erase","apt-get delete"],ans:1,tag:"패키지",exp:"apt-get purge: 패키지+설정파일 모두 제거 / remove: 패키지만"},
+  {q:"소스 파일 설치 순서로 알맞은 것은?",opts:["make→configure→install","configure→make→make install","make install→configure→make","make→make install→configure"],ans:1,tag:"패키지",exp:"configure(Makefile생성) → make(컴파일) → make install(설치)"},
+  {q:"tar 명령에서 bzip2 압축을 사용하는 옵션으로 알맞은 것은?",opts:["z","j","J","Z"],ans:1,tag:"패키지",exp:"z=gzip(.gz), j=bzip2(.bz2), J=xz(.xz), Z=compress(.Z)"},
+  {q:"압축률 높은 순서로 알맞은 것은?",opts:["gz>bz2>xz","xz>gz>bz2","xz>bz2>gz","bz2>gz>xz"],ans:2,tag:"패키지",exp:"압축률: compress < gzip < bz2 < xz (xz가 가장 높음)"},
+  {q:"tar cvf source.tar *.c 명령의 의미로 알맞은 것은?",opts:["C파일을 source.tar로 압축 해제","C파일들을 source.tar로 묶기","source.tar 내용 확인","source.tar를 C파일로 변환"],ans:1,tag:"패키지",exp:"c=묶기, v=진행출력, f=파일명지정. *.c 파일들을 source.tar로 묶기"},
+  {q:"CMake를 사용하는 프로젝트로 틀린 것은?",opts:["MySQL","KDE","LMMS","Apache httpd"],ans:3,tag:"패키지",exp:"CMake 사용: MySQL, KDE, LMMS. Apache는 일반 configure 사용"},
+  {q:"yum으로 nmap 패키지를 제거하는 명령으로 알맞은 것은?",opts:["yum delete nmap","yum erase nmap","yum remove nmap","yum clean nmap"],ans:2,tag:"패키지",exp:"yum remove 패키지명 (delete/erase는 yum 명령이 아님)"},
+  {q:"rpm -qf /bin/ls 명령의 역할은?",opts:["ls 파일 목록 출력","ls 파일이 속한 패키지 확인","ls 패키지 정보 출력","ls 패키지 설치"],ans:1,tag:"패키지",exp:"rpm -qf(--file): 특정 파일을 설치한 패키지명 역추적"},
+
+  // ===== 네트워크/보안 (86~95) =====
+  {q:"DNS에서 사용하는 포트번호로 알맞은 것은?",opts:["21","22","53","80"],ans:2,tag:"네트워크",exp:"DNS=53(TCP/UDP), SSH=22, FTP=21, HTTP=80"},
+  {q:"UDP 프로토콜과 가장 관련 있는 서비스로 알맞은 것은?",opts:["TELNET","DNS","SMTP","HTTP"],ans:1,tag:"네트워크",exp:"DNS는 TCP/UDP 모두 사용. SNMP(161), TFTP(69), DHCP(67/68)도 UDP"},
+  {q:"OSI 7계층 중 데이터링크 계층의 PDU로 알맞은 것은?",opts:["비트","프레임","패킷","세그먼트"],ans:1,tag:"네트워크",exp:"물리=비트, 데이터링크=프레임, 네트워크=패킷, 전송=세그먼트"},
+  {q:"라우터가 지원하는 최상위 OSI 계층은?",opts:["1계층(물리)","2계층(데이터링크)","3계층(네트워크)","4계층(전송)"],ans:2,tag:"네트워크",exp:"라우터: OSI 물리/데이터링크/네트워크 계층(3계층)까지 지원"},
+  {q:"C클래스 IPv4 주소 범위로 알맞은 것은?",opts:["0.0.0.0~127.255.255.255","128.0.0.0~191.255.255.255","192.0.0.0~223.255.255.255","224.0.0.0~239.255.255.255"],ans:2,tag:"네트워크",exp:"A:0~127, B:128~191, C:192~223, D:224~239"},
+  {q:"netstat 명령에서 라우팅 테이블을 확인하는 옵션은?",opts:["-t","-m","-n","-r"],ans:3,tag:"네트워크",exp:"netstat -r: 라우팅테이블 / -t: TCP / -n: 숫자 표시"},
+  {q:"OSI 7계층 제정 기관으로 알맞은 것은?",opts:["IEEE","ISO","IANA","ITU-T"],ans:1,tag:"네트워크",exp:"ISO: OSI 7계층 제정 / IEEE: LAN 표준 / IANA→ICANN: IP/도메인 관리"},
+  {q:"패킷 교환 방식에 대한 설명으로 틀린 것은?",opts:["전송 대역폭이 동적","패킷별 우선순위 부여 가능","회선교환보다 지연이 적음","이론상 무제한 수용 가능"],ans:2,tag:"네트워크",exp:"패킷교환은 회선교환보다 지연이 더 발생. 나머지는 올바른 설명"},
+  {q:"SSH 서버 변경된 포트로 접속하는 옵션으로 알맞은 것은?",opts:["-l","-n","-p","-x"],ans:2,tag:"네트워크",exp:"ssh -p 포트번호 서버IP"},
+  {q:"SMTP 프로토콜의 포트번호로 알맞은 것은?",opts:["21","23","25","110"],ans:2,tag:"네트워크",exp:"SMTP=25(메일송신), POP3=110(수신), IMAP=143(수신), Telnet=23"},
+
+  // ===== X윈도/가상화 (96~100) =====
+  {q:"KDE와 가장 관련 깊은 라이브러리로 알맞은 것은?",opts:["GTK+","Xlib","Qt","XCB"],ans:2,tag:"X윈도",exp:"KDE=Qt(C++), GNOME=GTK+(LGPL/GNU)"},
+  {q:"X서버에 IP 기반으로 클라이언트 접근 허가하는 명령은?",opts:["xauth","xset","xhost","xrandr"],ans:2,tag:"X윈도",exp:"xhost: IP 기반 접근 허가/차단 / xauth: MMC 방식 인증"},
+  {q:"부팅 시 X윈도 모드로 설정하는 명령으로 알맞은 것은?",opts:["systemctl set-default multi-user.target","systemctl set-default graphical.target","systemctl get-default graphical.target","systemctl get-default multi-user.target"],ans:1,tag:"X윈도",exp:"X윈도=graphical.target / 텍스트=multi-user.target"},
+  {q:"CPU 반가상화와 전가상화 모두 지원하는 하이퍼바이저는?",opts:["KVM","VirtualBox","Xen","Docker"],ans:2,tag:"가상화",exp:"Xen: 반가상화+전가상화 모두 지원 / KVM: 전가상화 / VirtualBox: 전가상화"},
+  {q:"IaaS 클라우드 서비스의 설명으로 알맞은 것은?",opts:["응용 프로그램 서비스","개발 플랫폼 제공","IT 하드웨어 자원 대여","가상 데스크탑 제공"],ans:2,tag:"가상화",exp:"IaaS: 서버/스토리지 등 IT 하드웨어 자원 대여 / PaaS: 플랫폼 / SaaS: 앱서비스"},
 ];
 
+let quizData = [...allQuiz];
 let current = 0, score = 0, wrong = 0, answered = [];
+let wrongList = [];
+
+function filterQuiz(tag) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  quizData = tag === 'all' ? [...allQuiz] : allQuiz.filter(q => q.tag === tag);
+  restart();
+}
 
 function render() {
   const container = document.getElementById('quiz-container');
+  if (current >= quizData.length) { showResult(); return; }
   const q = quizData[current];
   const isAnswered = answered[current] !== undefined;
-
   container.innerHTML = `
-    <div class="q-card ${isAnswered ? (answered[current] === q.ans ? 'correct' : 'wrong') : ''}" id="qcard">
+    <div class="q-card ${isAnswered ? (answered[current]===q.ans?'correct':'wrong') : ''}">
       <div class="q-num">
         <span>문제 ${current+1} / ${quizData.length}</span>
         <span class="q-tag">${q.tag}</span>
       </div>
       <div class="q-text">${q.q}</div>
-      ${q.code ? `<div class="q-code">${q.code}</div>` : ''}
       <div class="opts">
-        ${q.opts.map((o,i) => `
-          <div class="opt ${getOptClass(i)}" onclick="${isAnswered ? '' : `selectAns(${i})`}" id="opt${i}">
-            <span class="opt-icon">${getOptIcon(i, isAnswered, q.ans)}</span>
-            ${o}
-          </div>
+        ${q.opts.map((o,i)=>`
+          <button class="opt ${getOptClass(i)}" onclick="${isAnswered?'':`selectAns(${i})`}">
+            <span class="opt-icon">${getOptIcon(i,isAnswered,q.ans)}</span>${o}
+          </button>
         `).join('')}
       </div>
-      <div class="explanation ${isAnswered ? 'show' : ''}" id="exp">
+      <div class="explanation ${isAnswered?'show':''}" id="exp">
         <div class="exp-title">💡 해설</div>
         <div class="exp-text">${q.exp}</div>
       </div>
     </div>
     <div class="nav-btns">
       <button class="nav-btn" onclick="prev()" ${current===0?'disabled':''}>← 이전</button>
-      <button class="nav-btn primary" onclick="next()">${current===quizData.length-1 ? '결과 보기' : '다음 →'}</button>
+      <button class="nav-btn primary" onclick="next()">${current===quizData.length-1?'결과 보기':'다음 →'}</button>
     </div>
   `;
   updateScore();
 }
 
 function getOptClass(i) {
-  if (answered[current] === undefined) return '';
-  if (i === quizData[current].ans) return 'correct-ans';
-  if (i === answered[current]) return 'wrong-ans';
+  if(answered[current]===undefined) return '';
+  if(i===quizData[current].ans) return 'correct-ans';
+  if(i===answered[current]) return 'wrong-ans';
   return '';
 }
 
-function getOptIcon(i, isAnswered, ans) {
-  if (!isAnswered) return String.fromCharCode(9312 + i);
-  if (i === ans) return '✓';
-  if (i === answered[current] && answered[current] !== ans) return '✗';
-  return String.fromCharCode(9312 + i);
+function getOptIcon(i,isAnswered,ans) {
+  if(!isAnswered) return String.fromCharCode(9312+i);
+  if(i===ans) return '✓';
+  if(i===answered[current]&&answered[current]!==ans) return '✗';
+  return String.fromCharCode(9312+i);
 }
 
 function selectAns(i) {
-  answered[current] = i;
-  if (i === quizData[current].ans) score++;
-  else wrong++;
+  answered[current]=i;
+  if(i===quizData[current].ans) score++;
+  else { wrong++; wrongList.push(current); }
   render();
 }
 
 function updateScore() {
-  document.getElementById('correct-count').textContent = score;
-  document.getElementById('wrong-count').textContent = wrong;
-  const done = answered.filter(a=>a!==undefined).length;
-  document.getElementById('prog-fill').style.width = (done/quizData.length*100)+'%';
-  document.getElementById('prog-text').textContent = `${done} / ${quizData.length} 문제`;
+  document.getElementById('correct-count').textContent=score;
+  document.getElementById('wrong-count').textContent=wrong;
+  const done=answered.filter(a=>a!==undefined).length;
+  document.getElementById('prog-fill').style.width=(done/quizData.length*100)+'%';
+  document.getElementById('prog-text').textContent=`${done} / ${quizData.length} 문제`;
 }
 
-function next() {
-  if (current < quizData.length-1) { current++; render(); }
-  else showResult();
-}
-
-function prev() {
-  if (current > 0) { current--; render(); }
-}
+function next() { if(current<quizData.length-1){current++;render();}else showResult(); }
+function prev() { if(current>0){current--;render();} }
 
 function showResult() {
   document.getElementById('quiz-container').style.display='none';
-  const rs = document.getElementById('result-screen');
+  const rs=document.getElementById('result-screen');
   rs.classList.add('show');
-  const pct = Math.round(score/quizData.length*100);
-  document.getElementById('result-emoji').textContent = pct>=80?'🎉':pct>=60?'😊':'💪';
-  document.getElementById('result-score').textContent = `${score} / ${quizData.length} (${pct}%)`;
-  document.getElementById('result-msg').textContent = pct>=80?'합격권입니다! 자신감 갖고 시험 보세요!':pct>=60?'조금만 더 복습하면 합격 가능!':'취약 토픽을 다시 복습해보세요';
+  const pct=Math.round(score/quizData.length*100);
+  document.getElementById('result-emoji').textContent=pct>=80?'🎉':pct>=60?'😊':'💪';
+  document.getElementById('result-score').textContent=`${score} / ${quizData.length} (${pct}%)`;
+  document.getElementById('result-msg').textContent=pct>=80?'합격권! 자신감 갖고 시험 보세요!':pct>=60?'조금만 더 복습하면 합격 가능!':'취약 토픽을 다시 복습해보세요';
 }
 
 function restart() {
-  current=0; score=0; wrong=0; answered=[];
+  current=0;score=0;wrong=0;answered=[];wrongList=[];
   document.getElementById('quiz-container').style.display='block';
   document.getElementById('result-screen').classList.remove('show');
   render();
+}
+
+function restartWrong() {
+  if(wrongList.length===0){alert('오답이 없어요! 완벽해요 🎉');return;}
+  quizData=wrongList.map(i=>allQuiz[i]);
+  restart();
 }
 
 render();
