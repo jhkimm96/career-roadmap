@@ -8,45 +8,150 @@
 <link rel="stylesheet" href="base.css">
 <style>
 .big-title{font-size:32px;font-weight:900;color:#e94560;text-align:center;padding:32px 24px 8px}
-.big-sub{text-align:center;color:#7775a0;font-size:14px;margin-bottom:40px}
+.big-sub{text-align:center;color:#7775a0;font-size:14px;margin-bottom:24px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:700px){.two-col{grid-template-columns:1fr}}
-.sheet-section{margin-bottom:40px}
+.sheet-section{margin-bottom:36px}
 .sheet-h{font-size:16px;font-weight:900;color:#fff;border-bottom:2px solid #e94560;padding-bottom:8px;margin-bottom:16px}
+.sheet-h.green{border-color:#34d399}
+.sheet-h.purple{border-color:#a855f7}
+.priority-bar{background:rgba(233,69,96,0.1);border:1px solid rgba(233,69,96,0.35);border-radius:10px;padding:14px 20px;margin-bottom:32px;font-size:13px;color:#e8e6f0;line-height:1.9}
+.priority-bar strong{color:#e94560}
+.priority-bar .green{color:#34d399}
+.sec-label{display:inline-block;font-size:11px;font-weight:900;padding:3px 10px;border-radius:12px;margin-bottom:14px;letter-spacing:.5px}
+.sec-label.fire{background:rgba(233,69,96,0.18);color:#e94560;border:1px solid rgba(233,69,96,0.4)}
+.sec-label.often{background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.35)}
 </style>
 </head>
 <body>
 <nav class="top-nav">
   <a href="index.html" class="back-btn">← 목록</a>
   <span class="nav-title">📋 최종 암기 치트시트</span>
-  <span class="nav-badge">시험 5분전</span>
+  <span class="nav-badge">시험 직전</span>
 </nav>
 <div class="content">
 
 <div class="big-title">🚀 시험 직전 최종 정리</div>
-<div class="big-sub">이것만 보고 들어가라</div>
+<div class="big-sub">우선순위 순서로 정렬 — 위에서부터 외워라</div>
 
-<!-- 포트번호 -->
-<div class="sheet-section">
-  <div class="sheet-h">📡 프로토콜 포트번호 전체표</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>포트</th><th>프로토콜</th><th>전송</th><th>포트</th><th>프로토콜</th><th>전송</th></tr>
-      <tr><td class="yellow">20</td><td class="hot">FTP (데이터)</td><td>TCP</td><td class="yellow">80</td><td class="hot">HTTP</td><td>TCP</td></tr>
-      <tr><td class="yellow">21</td><td class="hot">FTP (제어)</td><td>TCP</td><td class="yellow">110</td><td class="hot">POP3</td><td>TCP</td></tr>
-      <tr><td class="yellow">22</td><td class="hot">SSH</td><td>TCP</td><td class="yellow">143</td><td class="hot">IMAP</td><td>TCP</td></tr>
-      <tr><td class="yellow">23</td><td class="hot">Telnet</td><td>TCP</td><td class="yellow">161</td><td class="hot">SNMP</td><td><span class="hot">UDP</span></td></tr>
-      <tr><td class="yellow">25</td><td class="hot">SMTP</td><td>TCP</td><td class="yellow">162</td><td>SNMP Trap</td><td>UDP</td></tr>
-      <tr><td class="yellow">53</td><td class="hot">DNS</td><td><span class="hot">TCP/UDP</span></td><td class="yellow">443</td><td class="hot">HTTPS</td><td>TCP</td></tr>
-      <tr><td class="yellow">67</td><td>DHCP 서버</td><td>UDP</td><td class="yellow">993</td><td>IMAPS</td><td>TCP</td></tr>
-      <tr><td class="yellow">68</td><td>DHCP 클라이언트</td><td>UDP</td><td class="yellow">995</td><td>POP3S</td><td>TCP</td></tr>
-      <tr><td class="yellow">69</td><td>TFTP</td><td>UDP</td><td class="yellow">6000+</td><td class="hot">X-Window</td><td>TCP</td></tr>
-    </table>
-  </div>
-  <div class="memory"><div class="mem-label">💡 암기</div><p>DNS는 TCP/UDP 둘 다. SNMP는 UDP. SSH=22, Telnet=23 (22가 더 큰거 SSH)</p></div>
+<div class="priority-bar">
+  <strong>🔥 매회 출제 (반드시 암기)</strong> — 권한·특수권한 / 시그널 번호 / vi 에디터 / 패키지 관리 / X-Window / IP 클래스 / OSI 7계층 / 포트번호<br>
+  <span class="green">✅ 자주 출제 (여유 있으면)</span> — 셸 종류 / tar 옵션 / RPM 옵션 / crontab / 국제기구 / 소스설치
 </div>
 
-<!-- 시그널 -->
+<!-- ============================
+     🔥 PRIORITY 1 — 매회 출제
+     ============================ -->
+
+<!-- 1. 권한 & 특수권한 -->
+<span class="sec-label fire">🔥 매회 출제</span>
+<div class="sheet-section">
+  <div class="sheet-h">🔐 권한 & 특수권한</div>
+  <div class="two-col">
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>권한</th><th>숫자</th><th>의미</th></tr>
+          <tr><td class="mono hot">r</td><td class="yellow">4</td><td>읽기</td></tr>
+          <tr><td class="mono hot">w</td><td class="yellow">2</td><td>쓰기</td></tr>
+          <tr><td class="mono hot">x</td><td class="yellow">1</td><td>실행</td></tr>
+          <tr><td class="mono">rwx</td><td class="yellow">7</td><td>모든 권한</td></tr>
+          <tr><td class="mono">rw-</td><td class="yellow">6</td><td>읽기+쓰기</td></tr>
+          <tr><td class="mono">r-x</td><td class="yellow">5</td><td>읽기+실행</td></tr>
+          <tr><td class="mono">r--</td><td class="yellow">4</td><td>읽기만</td></tr>
+        </table>
+      </div>
+      <div class="code-block" style="margin-top:10px">
+chmod <span class="yellow">755</span> file  <span class="comment"># rwxr-xr-x</span>
+chmod <span class="yellow">644</span> file  <span class="comment"># rw-r--r--</span>
+chmod <span class="yellow">u+x</span> file  <span class="comment"># 소유자에 실행 추가</span>
+chown user:group file
+      </div>
+    </div>
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>특수권한</th><th>숫자</th><th>대상</th><th>효과</th></tr>
+          <tr><td class="hot">SetUID</td><td class="yellow">4</td><td>파일</td><td>실행 시 <strong>소유자 권한</strong>으로 실행</td></tr>
+          <tr><td class="hot">SetGID</td><td class="yellow">2</td><td>파일/디렉터리</td><td>실행 시 <strong>그룹 권한</strong>으로 실행</td></tr>
+          <tr><td class="hot">Sticky Bit</td><td class="yellow">1</td><td>디렉터리</td><td>본인 파일만 삭제 가능 (예: /tmp)</td></tr>
+        </table>
+      </div>
+      <div class="code-block" style="margin-top:10px">
+chmod <span class="yellow">4755</span> file  <span class="comment"># SetUID (s표시)</span>
+chmod <span class="yellow">2755</span> dir   <span class="comment"># SetGID</span>
+chmod <span class="yellow">1777</span> dir   <span class="comment"># Sticky Bit (t표시)</span>
+ls -l → <span class="yellow">-rwsr-xr-x</span>  <span class="comment"># SetUID 확인</span>
+      </div>
+      <div class="memory" style="margin-top:10px">
+        <div class="mem-label">💡 umask 계산</div>
+        <p>파일 기본권한 <strong>666</strong> − umask = 실제 권한</p>
+        <p>디렉터리 기본권한 <strong>777</strong> − umask = 실제 권한</p>
+        <p>umask 022 → 파일 644, 디렉터리 755</p>
+        <p>umask 077 → 파일 600, 디렉터리 700 (가장 안전)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 파일시스템 -->
+<span class="sec-label fire">🔥 매회 출제</span>
+<div class="sheet-section">
+  <div class="sheet-h">💾 파일시스템 관리</div>
+  <div class="two-col">
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th colspan="2">파일시스템 종류</th></tr>
+          <tr><td class="mono hot">ext2</td><td><span class="hot">저널링 없음</span>, 255자 파일명</td></tr>
+          <tr><td class="mono hot">ext3</td><td><span class="green">저널링 있음</span>, ACL 지원</td></tr>
+          <tr><td class="mono hot">ext4</td><td>ext3 확장, 최대 1EB</td></tr>
+          <tr><td class="mono">xfs</td><td>저널링, 대용량</td></tr>
+        </table>
+      </div>
+      <div class="box box-red" style="margin-top:10px">
+        <div class="box-title">⭐ HDD 추가 순서</div>
+        <p style="text-align:center;font-size:15px"><strong>fdisk → mkfs → mount</strong></p>
+        <p style="margin-top:6px">fdisk <span class="yellow">t</span> = 타입 변경 (<span class="hot">마운트 아님</span>)</p>
+        <p>fdisk <span class="yellow">-s</span> = 파티션 크기 출력</p>
+        <p>umount (<span class="hot">unmount 아님!</span>)</p>
+      </div>
+      <div class="tbl-wrap" style="margin-top:10px">
+        <table class="tbl">
+          <tr><th>명령어</th><th>역할</th></tr>
+          <tr><td class="mono hot">du -sh</td><td>디렉터리별 사용량</td></tr>
+          <tr><td class="mono hot">df -h</td><td>파티션별 남은 용량</td></tr>
+          <tr><td class="mono">fsck / e2fsck</td><td>ext 파일시스템 점검</td></tr>
+          <tr><td class="mono">xfs_repair</td><td>XFS 점검</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="box box-purple">
+        <div class="box-title">🔑 /etc/fstab 6개 필드</div>
+        <table class="tbl" style="margin-top:8px">
+          <tr><th>필드</th><th>내용</th></tr>
+          <tr><td class="yellow">1</td><td>장치명 / UUID / LABEL</td></tr>
+          <tr><td class="yellow">2</td><td>마운트 포인트</td></tr>
+          <tr><td class="yellow">3</td><td>파일시스템 타입</td></tr>
+          <tr><td class="hot">4 ★</td><td>마운트 옵션 (defaults, ro, rw, noauto)</td></tr>
+          <tr><td class="yellow">5</td><td>dump (0=안함, 1=함)</td></tr>
+          <tr><td class="hot">6 ★</td><td>fsck 순서 (0=안함, 1=루트, 2=나머지)</td></tr>
+        </table>
+        <p style="margin-top:8px"><code>/etc/fstab</code> = 정적(부팅 시 마운트) | <code>/etc/mtab</code> = 현재 마운트 상태</p>
+      </div>
+      <div class="box box-purple" style="margin-top:10px">
+        <div class="box-title">🔑 LVM 순서</div>
+        <p style="text-align:center;font-size:16px;margin:8px 0"><strong>PV → VG → LV</strong></p>
+        <p>Physical Volume → Volume Group → Logical Volume</p>
+        <p style="margin-top:6px"><span class="yellow">PE</span>(Physical Extent) = PV의 블록 단위</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 시그널 번호 -->
+<span class="sec-label fire">🔥 매회 출제</span>
 <div class="sheet-section">
   <div class="sheet-h">📶 시그널 번호</div>
   <div class="tbl-wrap">
@@ -55,101 +160,148 @@
       <tr><td class="yellow">1</td><td class="hot">SIGHUP</td><td>터미널 연결 끊김 → 종료 후 재시작</td></tr>
       <tr><td class="yellow">2</td><td class="hot">SIGINT</td><td><strong>Ctrl+C</strong> → 강제종료</td></tr>
       <tr><td class="yellow">3</td><td>SIGQUIT</td><td>Ctrl+\ → 코어 덤프</td></tr>
-      <tr><td class="yellow">9</td><td class="hot">SIGKILL</td><td>프로세스 <strong>강제종료</strong> (무조건)</td></tr>
-      <tr><td class="yellow">15</td><td class="hot">SIGTERM</td><td>kill 기본 시그널, <strong>정상종료</strong></td></tr>
+      <tr><td class="yellow">9</td><td class="hot">SIGKILL</td><td>프로세스 <strong>강제종료</strong> (무조건, 무시 불가)</td></tr>
+      <tr><td class="yellow">15</td><td class="hot">SIGTERM</td><td>kill 기본 시그널, <strong>정상종료</strong> 시도</td></tr>
       <tr><td class="yellow">18</td><td>SIGCONT</td><td>중지된 프로세스 재실행</td></tr>
-      <tr><td class="yellow">19</td><td>SIGSTOP</td><td>SIGCONT 받을 때까지 정지</td></tr>
       <tr><td class="yellow">20</td><td class="hot">SIGTSTP</td><td><strong>Ctrl+Z</strong> → 프로세스 대기(suspend)</td></tr>
     </table>
   </div>
-</div>
-
-<!-- 배포판-패키지 -->
-<div class="sheet-section">
-  <div class="sheet-h">📦 배포판별 패키지 관리 도구</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>배포판</th><th>기본(오프라인)</th><th>온라인</th></tr>
-      <tr><td class="hot">레드햇/CentOS</td><td class="mono yellow">RPM</td><td class="mono yellow">YUM / dnf</td></tr>
-      <tr><td class="hot">데비안/우분투</td><td class="mono yellow">dpkg</td><td class="mono yellow">apt-get</td></tr>
-      <tr><td class="hot">수세(SUSE)</td><td class="mono yellow">YaST</td><td class="mono yellow">zypper</td></tr>
-      <tr><td class="hot">페도라</td><td class="mono yellow">RPM</td><td class="mono yellow">dnf</td></tr>
-      <tr><td class="hot">우분투</td><td class="mono yellow">dpkg</td><td class="mono yellow">aptitude</td></tr>
-    </table>
-  </div>
-  <div class="memory"><div class="mem-label">💡 온라인 vs 오프라인</div><p>RPM/dpkg/YaST = 오프라인 기본 도구 | YUM/apt-get/zypper = 온라인 의존성 해결</p></div>
-</div>
-
-<div class="two-col">
-<!-- tar 옵션 -->
-<div class="sheet-section">
-  <div class="sheet-h">🗜️ tar 압축 옵션</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>옵션</th><th>의미</th></tr>
-      <tr><td class="mono yellow">c</td><td>묶기(create)</td></tr>
-      <tr><td class="mono yellow">x</td><td>풀기(extract)</td></tr>
-      <tr><td class="mono yellow">t</td><td>목록 보기(table)</td></tr>
-      <tr><td class="mono yellow">v</td><td>진행상황 출력(verbose)</td></tr>
-      <tr><td class="mono yellow">f</td><td>파일명 지정(file)</td></tr>
-      <tr><td class="mono hot">z</td><td>gzip (.gz)</td></tr>
-      <tr><td class="mono hot">j</td><td>bzip2 (.bz2)</td></tr>
-      <tr><td class="mono hot">J</td><td>xz (.xz)</td></tr>
-      <tr><td class="mono hot">Z</td><td>compress (.Z)</td></tr>
-    </table>
-  </div>
-  <div class="code-block">
-tar <span class="yellow">zxvf</span> file.tar.gz   <span class="comment"># gzip 해제</span>
-tar <span class="yellow">jxvf</span> file.tar.bz2  <span class="comment"># bzip2 해제</span>
-tar <span class="yellow">Jxvf</span> file.tar.xz   <span class="comment"># xz 해제</span>
-tar <span class="yellow">cvf</span> src.tar *.c    <span class="comment"># C파일 묶기</span>
-  </div>
-  <div class="memory"><div class="mem-label">💡 압축률 순서</div><p>compress &lt; gzip &lt; bz2 &lt; <strong>xz</strong> (xz가 가장 높음)</p></div>
-</div>
-
-<!-- RPM 옵션 -->
-<div class="sheet-section">
-  <div class="sheet-h">📋 RPM 주요 옵션</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>옵션</th><th>의미</th></tr>
-      <tr><td class="mono hot">-i</td><td>설치(install)</td></tr>
-      <tr><td class="mono hot">-U</td><td>업그레이드(없으면 설치)</td></tr>
-      <tr><td class="mono hot">-e</td><td>제거(erase)</td></tr>
-      <tr><td class="mono hot">-F</td><td>freshen(있을 때만 업그레이드)</td></tr>
-      <tr><td class="mono">-q</td><td>질의(query)</td></tr>
-      <tr><td class="mono">-qi</td><td>패키지 정보</td></tr>
-      <tr><td class="mono">-ql</td><td>파일 목록</td></tr>
-      <tr><td class="mono">-qa</td><td>전체 패키지</td></tr>
-      <tr><td class="mono">-qf</td><td>파일→패키지 역추적</td></tr>
-      <tr><td class="mono hot">--nodeps</td><td>의존성 무시</td></tr>
-      <tr><td class="mono hot">--force</td><td>강제 설치</td></tr>
-    </table>
+  <div class="box box-red" style="margin-top:12px">
+    <div class="box-title">⭐ 반드시 암기</div>
+    <p>Ctrl+C = <strong>2(SIGINT)</strong> | Ctrl+Z = <strong>20(SIGTSTP)</strong> | kill 기본 = <strong>15(SIGTERM)</strong> | 강제종료 = <strong>9(SIGKILL)</strong></p>
+    <p style="margin-top:6px">ps 상태값: <span class="yellow">R</span>=실행중 | <span class="yellow">S</span>=대기 | <span class="hot">Z</span>=좀비 | <span class="yellow">T</span>=정지 | <span class="yellow">D</span>=디스크I/O 대기</p>
+    <p style="margin-top:6px">NI값 범위: <strong>-20(최고) ~ 19(최저)</strong> | RSS = 실제 메모리 (CPU 아님)</p>
   </div>
 </div>
-</div>
 
-<!-- OSI 7계층 -->
+<!-- 3. 에디터 -->
+<span class="sec-label fire">🔥 매회 출제</span>
 <div class="sheet-section">
-  <div class="sheet-h">🌐 OSI 7계층</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>계층</th><th>이름</th><th>PDU</th><th>프로토콜/장비</th></tr>
-      <tr><td class="yellow">7</td><td class="hot">응용(Application)</td><td>메시지</td><td>HTTP, FTP, SMTP, SSH, DNS</td></tr>
-      <tr><td class="yellow">6</td><td>표현(Presentation)</td><td>메시지</td><td>부호화, 압축, 암호화</td></tr>
-      <tr><td class="yellow">5</td><td>세션(Session)</td><td>메시지</td><td>연결 설정/유지/해제</td></tr>
-      <tr><td class="yellow">4</td><td class="hot">전송(Transport)</td><td class="hot">세그먼트</td><td>TCP, UDP</td></tr>
-      <tr><td class="yellow">3</td><td class="hot">네트워크(Network)</td><td class="hot">패킷</td><td>IP, ICMP, ARP, RARP, <strong>라우터</strong></td></tr>
-      <tr><td class="yellow">2</td><td class="hot">데이터링크(DataLink)</td><td class="hot">프레임</td><td>Ethernet, <strong>브리지, 스위치</strong></td></tr>
-      <tr><td class="yellow">1</td><td class="hot">물리(Physical)</td><td class="hot">비트</td><td><strong>리피터, 허브, 케이블</strong></td></tr>
-    </table>
+  <div class="sheet-h">✏️ 에디터 핵심</div>
+  <div class="two-col">
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>에디터</th><th>개발자</th><th>특징</th></tr>
+          <tr><td class="hot">vi</td><td class="yellow">빌 조이</td><td>BSD, <strong>모드형</strong></td></tr>
+          <tr><td class="hot">vim</td><td class="yellow">브람 무레나르</td><td>vi 향상, 색상</td></tr>
+          <tr><td class="hot">emacs</td><td class="yellow">리처드 스톨만</td><td>LISP, <strong>비모드형</strong>, 호환성 우수</td></tr>
+          <tr><td>pico</td><td>Aboil Kasar</td><td>워싱턴대, <strong>자유SW 아님</strong></td></tr>
+          <tr><td>nano</td><td>GNU</td><td>pico 기반, <strong>자유SW O</strong></td></tr>
+          <tr><td>gedit</td><td>GNOME</td><td><strong>X윈도 전용</strong></td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>vi 명령</th><th>설명</th></tr>
+          <tr><td class="mono hot">i / a / o</td><td>입력모드 전환</td></tr>
+          <tr><td class="mono hot">dd / yy / p</td><td>줄 삭제 / 복사 / 붙여넣기</td></tr>
+          <tr><td class="mono hot">3yy</td><td>현재 행부터 3행 복사</td></tr>
+          <tr><td class="mono hot">:wq / :q!</td><td>저장종료 / 강제종료</td></tr>
+          <tr><td class="mono hot">:set nu / nonu</td><td>줄번호 표시 / 해제</td></tr>
+          <tr><td class="mono hot">:%s/old/new/g</td><td>전체 치환</td></tr>
+          <tr><td class="mono">vi -r file</td><td>비정상종료 복구 (.swp)</td></tr>
+          <tr><td class="mono">vi +20 / -c 20</td><td>20번째 줄로 열기</td></tr>
+        </table>
+      </div>
+      <div class="memory" style="margin-top:10px">
+        <div class="mem-label">💡 주의</div>
+        <p>:set <span class="hot">notnu</span> → 없는 명령 (틀린 것) | :set <span class="green">nonu</span> 가 정답</p>
+        <p>~/.exrc = vi 환경설정 파일</p>
+      </div>
+    </div>
   </div>
-  <div class="memory"><div class="mem-label">💡 암기법</div><p>물데네전세표응 / 비트→프레임→패킷→세그먼트→메시지</p></div>
 </div>
 
-<!-- IP 클래스 -->
+<!-- 4. 패키지 관리 -->
+<span class="sec-label fire">🔥 매회 출제</span>
 <div class="sheet-section">
-  <div class="sheet-h">📍 IP 클래스</div>
+  <div class="sheet-h">📦 패키지 관리</div>
+  <div class="two-col">
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>배포판</th><th>기본(오프라인)</th><th>온라인</th></tr>
+          <tr><td class="hot">레드햇/CentOS</td><td class="mono yellow">RPM</td><td class="mono yellow">YUM / dnf</td></tr>
+          <tr><td class="hot">데비안/우분투</td><td class="mono yellow">dpkg</td><td class="mono yellow">apt-get</td></tr>
+          <tr><td class="hot">수세(SUSE)</td><td class="mono yellow">YaST</td><td class="mono yellow">zypper</td></tr>
+          <tr><td class="hot">페도라</td><td class="mono yellow">RPM</td><td class="mono yellow">dnf</td></tr>
+        </table>
+      </div>
+      <div class="memory" style="margin-top:10px">
+        <div class="mem-label">💡 구분</div>
+        <p>오프라인(기본): RPM / dpkg / YaST</p>
+        <p>온라인(의존성 해결): YUM / apt-get / zypper</p>
+      </div>
+    </div>
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>RPM 옵션</th><th>의미</th></tr>
+          <tr><td class="mono hot">-i / -U / -e</td><td>설치 / 업그레이드 / 제거</td></tr>
+          <tr><td class="mono">-q / -qi / -ql / -qa</td><td>질의 / 정보 / 파일목록 / 전체</td></tr>
+          <tr><td class="mono hot">-qf</td><td>파일 → 패키지 역추적</td></tr>
+          <tr><td class="mono hot">-Va</td><td>설치된 <strong>모든</strong> 패키지 검증</td></tr>
+          <tr><td class="mono hot">-qd</td><td><strong>문서 파일</strong> 경로 출력</td></tr>
+          <tr><td class="mono hot">--test</td><td>실제 설치 없이 충돌 점검</td></tr>
+          <tr><td class="mono hot">--nodeps</td><td>의존성 무시</td></tr>
+        </table>
+      </div>
+      <div class="box box-red" style="margin-top:10px">
+        <div class="box-title">⚠️ rpm -V 검증코드</div>
+        <p><span class="yellow">G</span> = GPG서명 | <span class="yellow">U</span> = 소유자 | <span class="yellow">S</span> = 크기 | <span class="yellow">M</span> = 퍼미션</p>
+        <p>→ <span class="hot">"G = 소유자 변경"은 틀린 설명</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. X-Window -->
+<span class="sec-label fire">🔥 매회 출제</span>
+<div class="sheet-section">
+  <div class="sheet-h">🖥️ X-Window 핵심</div>
+  <div class="two-col">
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>구분</th><th>KDE</th><th>GNOME</th></tr>
+          <tr><td>라이브러리</td><td class="hot">Qt (C++)</td><td class="hot">GTK+ (LGPL)</td></tr>
+          <tr><td>윈도매니저</td><td class="hot">Kwin</td><td class="hot">Mutter / Metacity</td></tr>
+          <tr><td>파일관리자</td><td>Konqueror</td><td class="hot">Nautilus</td></tr>
+          <tr><td>디스플레이매니저</td><td class="hot">KDM</td><td class="hot">GDM</td></tr>
+        </table>
+      </div>
+      <div class="box box-red" style="margin-top:10px">
+        <div class="box-title">⚠️ 기출 주의</div>
+        <p>GNOME·KDE = <strong>데스크탑 환경</strong> → 윈도 매니저(X)</p>
+        <p>X-Window = 원격 연결 지원 O, 장치 독립적</p>
+      </div>
+    </div>
+    <div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <tr><th>명령/개념</th><th>설명</th></tr>
+          <tr><td class="mono hot">xhost + IP</td><td>해당 IP 접근 허가</td></tr>
+          <tr><td class="mono hot">xhost -</td><td>허용 목록 외 모두 차단</td></tr>
+          <tr><td class="mono hot">xauth</td><td>MMC 쿠키 기반 인증 (더 안전)</td></tr>
+          <tr><td class="mono hot">DISPLAY</td><td>X클라이언트 원격 전송 환경변수</td></tr>
+          <tr><td class="mono">startx</td><td>X-Window 시작 (내부: xinit 호출)</td></tr>
+        </table>
+      </div>
+      <div class="code-block" style="margin-top:10px">
+export DISPLAY='192.168.1.10:0.0'
+xauth add $DISPLAY MIT-MAGIC-COOKIE-1 &lt;값&gt;
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. IP 클래스 -->
+<span class="sec-label fire">🔥 매회 출제</span>
+<div class="sheet-section">
+  <div class="sheet-h">📍 IP 클래스 & 서브넷</div>
   <div class="tbl-wrap">
     <table class="tbl">
       <tr><th>클래스</th><th>범위</th><th>기본 서브넷마스크</th><th>사설 IP</th></tr>
@@ -158,114 +310,143 @@ tar <span class="yellow">cvf</span> src.tar *.c    <span class="comment"># C파�
       <tr><td class="hot">C</td><td>192.0.0.0 ~ 223.255.255.255</td><td class="mono">255.255.255.0 (/24)</td><td>192.168.0.0 ~ 192.168.255.255</td></tr>
     </table>
   </div>
+  <div class="memory"><div class="mem-label">💡 서브넷 계산</div><p>/24 = 호스트 수 254개 (256 - 2) | /25 = 126개 | /26 = 62개 | /27 = 30개</p></div>
 </div>
 
-<div class="two-col">
-<!-- 셸 종류 -->
+<!-- 7. OSI 7계층 -->
+<span class="sec-label fire">🔥 매회 출제</span>
 <div class="sheet-section">
-  <div class="sheet-h">🐚 셸 종류</div>
+  <div class="sheet-h">🌐 OSI 7계층</div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>계층</th><th>이름</th><th>PDU</th><th>프로토콜 / 장비</th></tr>
+      <tr><td class="yellow">7</td><td class="hot">응용(Application)</td><td>메시지</td><td>HTTP, FTP, SMTP, SSH, DNS</td></tr>
+      <tr><td class="yellow">6</td><td>표현(Presentation)</td><td>메시지</td><td>부호화, 압축, 암호화</td></tr>
+      <tr><td class="yellow">5</td><td>세션(Session)</td><td>메시지</td><td>연결 설정/유지/해제</td></tr>
+      <tr><td class="yellow">4</td><td class="hot">전송(Transport)</td><td class="hot">세그먼트</td><td>TCP, UDP</td></tr>
+      <tr><td class="yellow">3</td><td class="hot">네트워크(Network)</td><td class="hot">패킷</td><td>IP, ICMP, ARP, RARP | <strong>라우터</strong></td></tr>
+      <tr><td class="yellow">2</td><td class="hot">데이터링크(DataLink)</td><td class="hot">프레임</td><td>Ethernet | <strong>브리지, 스위치</strong></td></tr>
+      <tr><td class="yellow">1</td><td class="hot">물리(Physical)</td><td class="hot">비트</td><td><strong>리피터, 허브, 케이블</strong></td></tr>
+    </table>
+  </div>
+  <div class="memory"><div class="mem-label">💡 암기법</div><p>물→데→네→전→세→표→응 | 비트→프레임→패킷→세그먼트→메시지</p></div>
+</div>
+
+<!-- 8. 포트번호 -->
+<span class="sec-label fire">🔥 매회 출제</span>
+<div class="sheet-section">
+  <div class="sheet-h">📡 프로토콜 포트번호</div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>포트</th><th>프로토콜</th><th>전송</th><th>포트</th><th>프로토콜</th><th>전송</th></tr>
+      <tr><td class="yellow">20</td><td class="hot">FTP (데이터)</td><td>TCP</td><td class="yellow">80</td><td class="hot">HTTP</td><td>TCP</td></tr>
+      <tr><td class="yellow">21</td><td class="hot">FTP (제어)</td><td>TCP</td><td class="yellow">110</td><td class="hot">POP3</td><td>TCP</td></tr>
+      <tr><td class="yellow">22</td><td class="hot">SSH</td><td>TCP</td><td class="yellow">143</td><td class="hot">IMAP</td><td>TCP</td></tr>
+      <tr><td class="yellow">23</td><td class="hot">Telnet</td><td>TCP</td><td class="yellow">161</td><td class="hot">SNMP</td><td><span class="hot">UDP</span></td></tr>
+      <tr><td class="yellow">25</td><td class="hot">SMTP</td><td>TCP</td><td class="yellow">443</td><td class="hot">HTTPS</td><td>TCP</td></tr>
+      <tr><td class="yellow">53</td><td class="hot">DNS</td><td><span class="hot">TCP/UDP</span></td><td class="yellow">514</td><td>syslog</td><td>UDP</td></tr>
+      <tr><td class="yellow">67/68</td><td>DHCP</td><td>UDP</td><td class="yellow">6000+</td><td class="hot">X-Window</td><td>TCP</td></tr>
+      <tr><td class="yellow">69</td><td>TFTP</td><td>UDP</td><td class="yellow">162</td><td>SNMP Trap</td><td>UDP</td></tr>
+    </table>
+  </div>
+  <div class="memory"><div class="mem-label">💡 암기</div><p>DNS만 TCP/UDP 둘 다 | SNMP/DHCP/TFTP = UDP | 나머지 대부분 TCP | SSH=22 &gt; Telnet=23</p></div>
+</div>
+
+<!-- ============================
+     ✅ PRIORITY 2 — 자주 출제
+     ============================ -->
+
+<span class="sec-label often">✅ 자주 출제</span>
+<div class="two-col">
+
+<!-- 9. 셸 종류 -->
+<div class="sheet-section">
+  <div class="sheet-h green">🐚 셸 종류</div>
   <div class="tbl-wrap">
     <table class="tbl">
       <tr><th>셸</th><th>경로</th><th>개발자</th></tr>
       <tr><td class="hot">본셸(sh)</td><td class="mono">/bin/sh</td><td>스티븐 본</td></tr>
       <tr><td class="hot">콘셸(ksh)</td><td class="mono">/bin/ksh</td><td>데이비드 콘</td></tr>
       <tr><td class="hot">배쉬셸(bash)</td><td class="mono">/bin/bash</td><td>GNU 프로젝트</td></tr>
-      <tr><td>지셸(zsh)</td><td class="mono">/bin/zsh</td><td>-</td></tr>
       <tr><td class="hot">C셸(csh)</td><td class="mono">/bin/csh</td><td>빌 조이</td></tr>
       <tr><td>tcsh</td><td class="mono">/bin/tcsh</td><td>확장 C셸</td></tr>
-      <tr><td>dash</td><td class="mono">/bin/dash</td><td>Debian sh 대체</td></tr>
+      <tr><td>zsh</td><td class="mono">/bin/zsh</td><td>-</td></tr>
     </table>
   </div>
+  <div class="memory"><div class="mem-label">💡 암기</div><p>GNU 프로젝트 셸 = bash | C셸 개발 = 빌 조이 (vi와 동일)</p></div>
 </div>
 
-<!-- 에디터 개발자 -->
+<!-- 10. tar 옵션 -->
 <div class="sheet-section">
-  <div class="sheet-h">✏️ 에디터 개발자</div>
+  <div class="sheet-h green">🗜️ tar 압축 옵션</div>
   <div class="tbl-wrap">
     <table class="tbl">
-      <tr><th>에디터</th><th>개발자</th><th>특징</th></tr>
-      <tr><td class="hot">vi</td><td class="yellow">빌 조이</td><td>BSD, 모드형</td></tr>
-      <tr><td class="hot">vim</td><td class="yellow">브람 무레나르</td><td>vi 향상, 색상</td></tr>
-      <tr><td class="hot">emacs</td><td class="yellow">리처드 스톨만</td><td>LISP, 비모드형</td></tr>
-      <tr><td>pico</td><td>Aboil Kasar</td><td>워싱턴대, 비자유</td></tr>
-      <tr><td>nano</td><td>GNU</td><td>pico 기반, 자유SW</td></tr>
-      <tr><td>gedit</td><td>GNOME</td><td>X윈도 전용</td></tr>
+      <tr><th>옵션</th><th>의미</th></tr>
+      <tr><td class="mono yellow">c / x / t</td><td>묶기 / 풀기 / 목록 보기</td></tr>
+      <tr><td class="mono yellow">v / f</td><td>진행출력 / 파일명 지정</td></tr>
+      <tr><td class="mono hot">z / j / J / Z</td><td>gzip / bzip2 / xz / compress</td></tr>
     </table>
   </div>
-</div>
-</div>
-
-<!-- KDE vs GNOME -->
-<div class="sheet-section">
-  <div class="sheet-h">🖥️ X-Window 핵심 정리</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>구분</th><th>KDE</th><th>GNOME</th></tr>
-      <tr><td>라이브러리</td><td class="hot">Qt (C++)</td><td class="hot">GTK+ (LGPL)</td></tr>
-      <tr><td>윈도매니저</td><td class="hot">Kwin</td><td class="hot">Mutter / Metacity</td></tr>
-      <tr><td>파일관리자</td><td>Konqueror</td><td>Nautilus</td></tr>
-      <tr><td>디스플레이매니저</td><td>KDM</td><td>GDM</td></tr>
-    </table>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>명령어</th><th>설명</th></tr>
-      <tr><td class="mono hot">xhost + IP</td><td>해당 IP 접근 허가</td></tr>
-      <tr><td class="mono hot">xhost - IP</td><td>해당 IP 차단</td></tr>
-      <tr><td class="mono hot">xhost +(디폴트)</td><td>명시적 차단 외 모두 허용</td></tr>
-      <tr><td class="mono hot">xhost -</td><td>명시적 허용 외 모두 차단</td></tr>
-      <tr><td class="mono">xauth</td><td>MMC 방식 인증, .Xauthority 파일</td></tr>
-      <tr><td class="mono">DISPLAY 변수</td><td>X클라이언트 원격 전송 시 변경</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- cron -->
-<div class="sheet-section">
-  <div class="sheet-h">⏰ crontab 형식</div>
   <div class="code-block">
-<span class="comment"># 분(0-59) 시(0-23) 일(1-31) 월(1-12) 요일(0-7, 0=일) 명령어</span>
-* 4 * * 0,1 /etc/backup.sh   <span class="comment"># 매주 일·월 오전4시</span>
-2 10 * * 1 /etc/check.sh     <span class="comment"># 매주 월요일 10시2분</span>
-0-59/10 * * * * /script.sh   <span class="comment"># 10분마다</span>
-1 4 * * 0,6 /backup.sh       <span class="comment"># 토·일 4시1분</span>
-2 4 1 * * /monthly.sh        <span class="comment"># 매월 1일 4시2분</span>
+tar <span class="yellow">zxvf</span> file.tar.gz   <span class="comment"># gzip 해제</span>
+tar <span class="yellow">jxvf</span> file.tar.bz2  <span class="comment"># bzip2 해제</span>
+tar <span class="yellow">Jxvf</span> file.tar.xz   <span class="comment"># xz 해제</span>
   </div>
-  <div class="memory"><div class="mem-label">💡 요일</div><p>0=일요일, 1=월요일, 6=토요일, 7=일요일(0과 같음)</p></div>
+  <div class="memory"><div class="mem-label">💡 압축률 순서 (낮→높)</div><p>compress &lt; gzip &lt; bz2 &lt; <strong>xz</strong></p></div>
 </div>
 
-<!-- 국제기구 -->
+</div>
+
+<div class="two-col">
+
+<!-- 11. crontab -->
 <div class="sheet-section">
-  <div class="sheet-h">🏛️ 국제기구</div>
+  <div class="sheet-h green">⏰ crontab 형식</div>
+  <div class="box box-purple">
+    <div class="box-title">🔑 형식</div>
+    <p style="font-size:15px;text-align:center;font-family:monospace"><strong>분(0-59) 시(0-23) 일(1-31) 월(1-12) 요일(0-7) 명령어</strong></p>
+  </div>
+  <div class="code-block" style="margin-top:10px">
+* 4 * * 0,1 /backup.sh  <span class="comment"># 일·월 오전4시</span>
+2 10 * * 1 /check.sh    <span class="comment"># 월요일 10시2분</span>
+0-59/10 * * * * /script <span class="comment"># 10분마다</span>
+  </div>
+  <div class="memory"><div class="mem-label">💡 요일</div><p>0=일, 1=월, 6=토, 7=일(0과 동일) | crontab -l(목록) -r(삭제) -e(편집)</p></div>
+</div>
+
+<!-- 12. 국제기구 -->
+<div class="sheet-section">
+  <div class="sheet-h green">🏛️ 국제기구</div>
   <div class="tbl-wrap">
     <table class="tbl">
       <tr><th>기관</th><th>역할</th></tr>
-      <tr><td class="hot">IANA</td><td>ICANN 이전에 IP주소/도메인 관리 (→ 한국은 KISA)</td></tr>
-      <tr><td class="hot">ICANN</td><td>현재 IP주소/도메인 관리 국제기구</td></tr>
-      <tr><td class="hot">ISO</td><td>국제적인 표준화 기구 → OSI 7계층 제정</td></tr>
-      <tr><td class="hot">IEEE</td><td>전기공학/전자공학 전문가 단체 → LAN 관련 표준</td></tr>
-      <tr><td class="hot">ITU-T</td><td>국제 전기통신연합 → 통신 분야 표준</td></tr>
-      <tr><td>CCITT</td><td>국제 전신전화 자문위원회</td></tr>
-      <tr><td>TIA</td><td>통신 분야 기업 협회</td></tr>
-      <tr><td class="hot">EIA</td><td>전자산업 협회 → LAN 케이블 관련 표준</td></tr>
+      <tr><td class="hot">ICANN</td><td>현재 IP주소/도메인 관리</td></tr>
+      <tr><td class="hot">ISO</td><td>국제 표준화 기구 → OSI 7계층</td></tr>
+      <tr><td class="hot">IEEE</td><td>전기공학 전문가 단체 → LAN 표준</td></tr>
+      <tr><td class="hot">ITU-T</td><td>국제 전기통신연합 → 통신 표준</td></tr>
+      <tr><td class="hot">EIA</td><td>전자산업 협회 → LAN 케이블 표준</td></tr>
+      <tr><td>IANA</td><td>ICANN 이전 IP/도메인 관리</td></tr>
     </table>
   </div>
 </div>
 
-<!-- 소스 설치 -->
+</div>
+
+<!-- 13. 소스 설치 -->
+<span class="sec-label often">✅ 자주 출제</span>
 <div class="sheet-section">
-  <div class="sheet-h">⚙️ 소스 파일 설치 순서</div>
+  <div class="sheet-h green">⚙️ 소스 파일 설치 순서</div>
   <div class="box box-green">
     <div class="box-title">🔑 반드시 암기!</div>
     <p style="font-size:20px;text-align:center;margin:8px 0"><strong>./configure → make → make install</strong></p>
-    <p>configure: Makefile 생성, PATH 지정 | make: 컴파일 | make install: 설치</p>
-    <p>CMake 사용 프로젝트: MySQL, KDE, LMMS</p>
+    <p>configure: <strong>Makefile 생성</strong>, PATH 지정 | make: <strong>컴파일</strong> | make install: <strong>설치</strong></p>
+    <p style="margin-top:6px">CMake 사용: MySQL, KDE, LMMS | CMake는 크로스 컴파일 <strong>가능</strong></p>
   </div>
 </div>
 
 <div class="page-nav">
   <a href="index.html" class="page-btn center">← 메인으로</a>
-  <a href="quiz.html" class="page-btn">기출 퀴즈 →</a>
+  <a href="quiz/quiz.html" class="page-btn">기출 퀴즈 →</a>
 </div>
 
 </div>
