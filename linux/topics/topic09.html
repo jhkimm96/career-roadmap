@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 09 — 압축 & 소스 설치</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 09 · 압축 & 소스 설치</span>
+  <span class="nav-badge">자주 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">tar 옵션 ⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>옵션</th><th>의미</th></tr>
+        <tr><td class="mono hot">c</td><td>파일 묶기(create)</td></tr>
+        <tr><td class="mono hot">x</td><td>tar 파일 풀기(extract)</td></tr>
+        <tr><td class="mono hot">t</td><td>묶인 파일 목록 보기(table)</td></tr>
+        <tr><td class="mono hot">v</td><td>처리 과정 출력(verbose)</td></tr>
+        <tr><td class="mono hot">f</td><td>파일명 지정(file)</td></tr>
+        <tr><td class="mono hot">z</td><td>gzip 압축/해제 (.gz)</td></tr>
+        <tr><td class="mono hot">j</td><td>bzip2 압축/해제 (.bz2)</td></tr>
+        <tr><td class="mono hot">J</td><td>xz 압축/해제 (.xz)</td></tr>
+        <tr><td class="mono hot">Z</td><td>compress 압축/해제 (.Z)</td></tr>
+        <tr><td class="mono">r</td><td>기존 tar 파일에 파일 추가(reappend)</td></tr>
+        <tr><td class="mono">P</td><td>절대 경로로 정보 출력</td></tr>
+        <tr><td class="mono">C</td><td>디렉터리 변경(change directory)</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+<span class="comment"># gzip 압축 해제</span>
+tar <span class="yellow">zxvf</span> file.tar.gz
+
+<span class="comment"># bzip2 압축 해제</span>
+tar <span class="yellow">jxvf</span> file.tar.bz2
+
+<span class="comment"># xz 압축 해제</span>
+tar <span class="yellow">Jxvf</span> file.tar.xz
+
+<span class="comment"># C언어 파일만 묶기</span>
+tar <span class="yellow">cvf</span> source.tar *.c
+
+<span class="comment"># 압축된 tar 내용 확인 (해제 안 함)</span>
+tar <span class="yellow">jtvf</span> php-8.2.7.tar.bz2
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">압축 명령어 & 압축률 순서</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>압축</th><th>해제</th><th>확장자</th></tr>
+        <tr><td class="mono">compress</td><td class="mono">uncompress</td><td class="mono">.Z</td></tr>
+        <tr><td class="mono">gzip</td><td class="mono">gunzip</td><td class="mono">.gz</td></tr>
+        <tr><td class="mono">bzip2</td><td class="mono">bunzip2</td><td class="mono">.bz2</td></tr>
+        <tr><td class="mono hot">xz</td><td class="mono">unxz</td><td class="mono">.xz</td></tr>
+      </table>
+    </div>
+    <div class="box box-purple">
+      <div class="box-title">🔑 압축률 순서 (낮→높)</div>
+      <p style="font-size:16px;text-align:center;margin:8px 0"><strong>compress &lt; gzip &lt; bz2 &lt; xz</strong></p>
+      <p>xz가 가장 높은 압축률</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령</th><th>주요 옵션</th><th>설명</th></tr>
+        <tr><td class="mono">gzip</td><td class="mono hot">-v</td><td>압축/해제 시 <strong>진행 정보 + 압축률</strong> 출력 (verbose)</td></tr>
+        <tr><td class="mono">xz</td><td class="mono hot">-d</td><td>압축 해제 (decompress), <code>unxz</code>와 동일</td></tr>
+        <tr><td class="mono">xz</td><td class="mono hot">-dv</td><td>압축 해제 + <strong>진행 상황 출력</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">소스 파일 설치 순서 ⭐⭐</div>
+    <div class="box box-green">
+      <div class="box-title">🔑 반드시 암기!</div>
+      <p style="font-size:18px;text-align:center;margin:8px 0"><strong>./configure → make → make install</strong></p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>단계</th><th>명령</th><th>역할</th></tr>
+        <tr><td class="hot">1단계</td><td class="mono hot">./configure</td><td>환경 설정, <strong>Makefile 생성</strong>, PATH 지정 (설치 경로 지정)</td></tr>
+        <tr><td class="hot">2단계</td><td class="mono hot">make</td><td>Makefile로 소스 코드 <strong>컴파일</strong>, 실행 파일 생성</td></tr>
+        <tr><td class="hot">3단계</td><td class="mono hot">make install</td><td>컴파일된 프로그램을 시스템에 <strong>설치</strong></td></tr>
+        <tr><td>기타</td><td class="mono">make clean</td><td>이전 작업 설정/파일 삭제 후 재설정</td></tr>
+      </table>
+    </div>
+    <div class="box box-blue">
+      <div class="box-title">📌 CMake 사용 프로젝트</div>
+      <p>CMake(Cross Platform Make): 멀티플랫폼, MAKE 대용품, 윈도우도 가능</p>
+      <p>CMake 사용: <strong>MySQL, KDE, LMMS</strong></p>
+      <p>→ <span class="hot">"CMake는 크로스 컴파일이 불가능하다"는 틀린 설명</span> — CMake는 크로스 컴파일 <span class="green">가능</span></p>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic08.html" class="page-btn">← Topic 08: 패키지</a>
+    <a href="topic10.html" class="page-btn center">Topic 10: 프린터 →</a>
+  </div>
+</div>
+</body>
+</html>

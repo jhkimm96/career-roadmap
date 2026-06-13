@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 19 — 메일 프로토콜 & 기타</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 19 · 메일 프로토콜 & 기타</span>
+  <span class="nav-badge">자주 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">메일 관련 프로토콜 ⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>프로토콜</th><th>포트</th><th>역할</th></tr>
+        <tr><td class="hot">SMTP</td><td class="yellow">25</td><td>메일 <strong>송신</strong>, 서버 간 메시지 교환</td></tr>
+        <tr><td class="hot">POP3</td><td class="yellow">110</td><td>메일 <strong>수신</strong>, 서버에서 로컬로 다운로드</td></tr>
+        <tr><td class="hot">IMAP4</td><td class="yellow">143</td><td>메일 <strong>수신</strong>, 서버에 메일 보관하면서 확인</td></tr>
+        <tr><td class="hot">MIME</td><td>-</td><td>멀티미디어 전자우편 표준, SMTP의 확장 규격</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 메일 프로토콜이 아닌 것</div>
+      <p>FTP, SNMP는 메일과 무관</p>
+      <p>SMTP=송신 | POP3, IMAP=수신</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">패킷교환 vs 회선교환</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>패킷 교환</th><th>회선 교환</th></tr>
+        <tr><td>대역폭</td><td>동적</td><td>고정</td></tr>
+        <tr><td>지연</td><td class="hot">더 많이 발생</td><td>적음</td></tr>
+        <tr><td>우선순위</td><td>패킷별 부여 가능</td><td>불가</td></tr>
+        <tr><td>수용</td><td>이론상 무제한</td><td>제한적</td></tr>
+        <tr><td>오버헤드</td><td>패킷마다 있음</td><td>없음</td></tr>
+        <tr><td>예시</td><td>X.25, Frame Relay, ATM</td><td>HDLC, PPP</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">모바일 OS</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>OS</th><th>개발/특징</th></tr>
+        <tr><td class="hot">타이젠(Tizen)</td><td>인텔+삼성, 리눅스 재단, Meego 기반. 리눅스 기반 무료 공개</td></tr>
+        <tr><td class="hot">안드로이드</td><td>구글 개발, <strong>리눅스 2.6 커널</strong> 기반, <strong>오픈 핸드셋 얼라이언스(OHA)</strong>에서 주도</td></tr>
+        <tr><td class="hot">iOS</td><td>애플 개발, 아이폰 전용</td></tr>
+        <tr><td>마에모(Maemo)</td><td>노키아 스마트폰/인터넷 태블릿용</td></tr>
+        <tr><td>모블린(Moblin)</td><td>인텔+리눅스 재단, 넷북용</td></tr>
+        <tr><td class="hot">QNX</td><td>1982년 <strong>유닉스 계열</strong> 서버 OS → <span class="hot">리눅스 커널 아님</span></td></tr>
+        <tr><td class="hot">webOS</td><td>리눅스 커널, Palm OS 계승, LG 개발</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">임베디드 리눅스 ⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>내용</th></tr>
+        <tr><td>정의</td><td>특정 기능을 수행하기 위해 기기에 내장된 컴퓨터 시스템에 탑재된 리눅스</td></tr>
+        <tr><td class="hot">장점</td><td>소스 공개, 무료, 다양한 아키텍처 지원, 안정성</td></tr>
+        <tr><td class="hot">단점</td><td>메모리 접근 방식이 복잡 → <span class="hot">"적은 메모리만 사용"은 틀린 설명</span></td></tr>
+        <tr><td>적용 분야</td><td>스마트TV, 스마트폰, 라우터, 산업용 기기 등</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">기타 중요 사항</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>systemd</td><td>CentOS 7부터 init 대신 사용. PID=1</td></tr>
+        <tr><td>lsmod</td><td>커널에 로드된 모듈 확인</td></tr>
+        <tr><td>modprobe</td><td>리눅스 커널에 모듈 추가/제거</td></tr>
+        <tr><td>SYN Flooding</td><td>DDoS 공격. netstat -an으로 확인, arp로 MAC 차단</td></tr>
+        <tr><td class="hot">GENIVI</td><td>2009년 설립. <strong>BMW, GM, 인텔</strong> 등 참여. 차량용 IVI(In-Vehicle Infotainment) 오픈소스 플랫폼 표준화</td></tr>
+        <tr><td class="hot">IoT</td><td>사물인터넷(Internet of Things). 각종 사물에 센서와 통신 기능 내장해 인터넷으로 연결하는 기술</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic18.html" class="page-btn">← Topic 18: 국제기구</a>
+    <a href="../quiz/quiz.html" class="page-btn center">🎯 기출 퀴즈 도전 →</a>
+  </div>
+</div>
+</body>
+</html>

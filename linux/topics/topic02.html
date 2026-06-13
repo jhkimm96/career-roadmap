@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 02 — 파일시스템 관리</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 02 · 파일시스템 관리</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">파일시스템 종류</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>종류</th><th>특징</th></tr>
+        <tr><td class="mono">ext2</td><td>255자 파일명, 2GB 단일파일, 4TB 디스크, <span class="hot">저널링 없음</span></td></tr>
+        <tr><td class="mono">ext3</td><td>ext2 확장, <span class="green">저널링 있음</span>, ACL 지원</td></tr>
+        <tr><td class="mono">ext4</td><td>ext3 확장, 최대 1EB</td></tr>
+        <tr><td class="mono">xfs</td><td>저널링, 대용량 지원</td></tr>
+        <tr><td class="mono">nfs</td><td>네트워크 파일시스템, 파일 공유</td></tr>
+        <tr><td class="mono">cifs</td><td>SMB의 확장 (윈도우 공유)</td></tr>
+        <tr><td class="mono">ntfs</td><td>윈도우 파일시스템</td></tr>
+        <tr><td class="mono">udf</td><td>DVD 파일시스템</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 저널링 파일시스템</div>
+      <p><strong>JFS, XFS, ReiserFS, ext3</strong> → 대표적 저널링 파일시스템</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">리눅스 디렉터리 구조 ⭐⭐</div>
+    <div class="section-sub">기출 포인트: 각 디렉터리 역할 구분, /usr/local vs /usr</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>디렉터리</th><th>역할</th></tr>
+        <tr><td class="mono hot">/</td><td>최상위(루트) 디렉터리</td></tr>
+        <tr><td class="mono hot">/bin</td><td>기본 명령어 (ls, cp, mv 등)</td></tr>
+        <tr><td class="mono hot">/sbin</td><td>시스템 관리 명령어 (root 전용, fdisk, mkfs 등)</td></tr>
+        <tr><td class="mono hot">/etc</td><td>시스템 <strong>설정 파일</strong> 저장</td></tr>
+        <tr><td class="mono hot">/var</td><td><strong>메일·로그</strong> 등 가변 데이터 저장</td></tr>
+        <tr><td class="mono hot">/tmp</td><td>임시 파일 (Sticky Bit 설정됨)</td></tr>
+        <tr><td class="mono hot">/home</td><td>일반 사용자 홈 디렉터리</td></tr>
+        <tr><td class="mono hot">/usr</td><td>사용자 관련 파일 (배포판 설치 프로그램)</td></tr>
+        <tr><td class="mono hot">/usr/local</td><td><strong>소스 컴파일</strong>로 직접 설치한 프로그램</td></tr>
+        <tr><td class="mono hot">/proc</td><td>프로세스·시스템 정보 (가상 파일시스템)</td></tr>
+        <tr><td class="mono hot">/dev</td><td>장치 파일 (하드디스크, 터미널 등)</td></tr>
+        <tr><td class="mono hot">/lib</td><td>공유 라이브러리</td></tr>
+        <tr><td class="mono hot">/boot</td><td>부팅 관련 파일 (커널 이미지)</td></tr>
+      </table>
+    </div>
+    <div class="box box-yellow">
+      <div class="box-title">💡 리눅스 파일 3종류 (틀린 것 구분)</div>
+      <p>일반 파일 / 디렉터리 / 특수 파일(장치·소켓·파이프) → <span class="hot">백업 파일은 별도 종류가 아님</span></p>
+      <p>파일명에 공백·필드분리자 포함 <span class="green">가능</span> ("포함할 수 없다"는 틀린 설명)</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">마운트 관련 명령어</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>설명</th><th>주요 옵션</th></tr>
+        <tr><td class="mono hot">mount</td><td>장치와 디렉터리 연결</td><td class="mono">-t (파일시스템 타입), -o (옵션)</td></tr>
+        <tr><td class="mono hot">umount</td><td>연결 해제 (<span class="hot">unmount 아님!</span>)</td><td class="mono"><span class="yellow">-a</span>: /etc/mtab 전체 해제</td></tr>
+        <tr><td class="mono">eject</td><td>이동식 보조기억장치 제거</td><td>-</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+<span class="comment"># ext4 파일시스템으로 마운트</span>
+mount <span class="yellow">-t</span> ext4 /dev/sdb1 /data
+
+<span class="comment"># 읽기/쓰기로 재마운트</span>
+mount <span class="yellow">-o</span> remount,rw /home
+
+<span class="comment"># 윈도우 공유폴더 마운트 (cifs)</span>
+mount -t <span class="yellow">cifs</span> //192.168.5.13/data /mnt
+
+<span class="comment"># FAT-32(윈도우) 읽기 전용 마운트</span>
+mount -t <span class="yellow">vfat</span> -o <span class="yellow">ro</span> /dev/sda1 /mnt
+
+<span class="comment"># ISO 이미지 읽기 전용 마운트 (loop 옵션)</span>
+mount -t <span class="yellow">iso9660</span> -o ro,<span class="yellow">loop</span> /test.iso /mnt
+
+<span class="comment"># IDE P-ATA 2번째 디스크 1번째 파티션 → /dev/hdb1</span>
+<span class="comment"># hda=1번째, hdb=2번째 | 1=첫파티션</span>
+mount -t ext4 -o ro /dev/hdb1 /mnt
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">파티션 & 파일시스템 생성</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>역할</th><th>옵션</th></tr>
+        <tr><td class="mono hot">fdisk</td><td>파티션 생성/삭제/타입결정</td><td class="mono">-l(목록), -s(크기출력), d(삭제), n(새파티션), t(타입변경), w(저장), q(종료)</td></tr>
+        <tr><td class="mono hot">mkfs</td><td>파일시스템 생성(포맷)</td><td class="mono">mkfs.xfs, mkfs.ext4</td></tr>
+        <tr><td class="mono hot">mke2fs</td><td>ext2/3/4 포맷</td><td class="mono"><span class="yellow">-j</span>(ext3 저널링), <span class="yellow">-t</span>(타입지정)</td></tr>
+      </table>
+    </div>
+    <div class="box box-red">
+      <div class="box-title">⭐ 기출 핵심</div>
+      <ul>
+        <li><code>mke2fs -j /dev/sdb1</code> → 자동으로 <strong>ext3</strong>으로 생성 (저널링)</li>
+        <li><code>mke2fs -t ext4 /dev/sdX</code> → ext4 타입 지정</li>
+        <li><code>mkfs.xfs /dev/sdb1</code> → xfs 파일시스템 생성</li>
+        <li>fdisk 작업 순서: 파티션 작업 → <strong>mkfs/mke2fs</strong>로 파일시스템 생성</li>
+        <li>새 HDD 추가 전체 순서: <strong>fdisk → mkfs → mount</strong></li>
+        <li>fdisk <code>t</code> 명령 = 파티션 <strong>타입 변경</strong> (마운트 아님 — 틀린 설명 주의)</li>
+        <li>fdisk <code>-s 파티션</code> = 파티션 <strong>크기 출력</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">파일시스템 점검/복구</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>대상</th><th>설명</th></tr>
+        <tr><td class="mono hot">fsck</td><td>ext 계열</td><td>파일시스템 검사/수리. <code>/lost+found</code>에서 작업</td></tr>
+        <tr><td class="mono hot">e2fsck</td><td>ext2/3/4</td><td>파일시스템 점검/복구</td></tr>
+        <tr><td class="mono hot">xfs_repair</td><td>XFS</td><td>XFS 파일시스템 점검</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 암기</div>
+      <p>ext → <strong>fsck / e2fsck</strong> | XFS → <strong>xfs_repair</strong></p>
+      <p><code>/lost+found</code> → fsck가 손상된 파일 연결하는 디렉터리</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">디스크 사용량 확인</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>역할</th><th>주요 옵션</th></tr>
+        <tr><td class="mono hot">du</td><td><span class="yellow">디렉터리별</span> 사용량</td><td class="mono">-s(합계), -h(사람이 읽기 쉽게 KB/MB/GB)</td></tr>
+        <tr><td class="mono hot">df</td><td><span class="yellow">마운트된 파티션별</span> 남은 용량</td><td class="mono">-T(파일시스템 타입), -h(단위 표시), -a(0블록 포함)</td></tr>
+        <tr><td class="mono">quota</td><td>디스크 사용량 제한/확인</td><td>-</td></tr>
+        <tr><td class="mono">blkid</td><td>파티션 UUID와 파일시스템 정보</td><td>-</td></tr>
+        <tr><td class="mono">lsblk</td><td>블록 장치 정보 (트리 형식)</td><td>-</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">/etc/fstab ⭐⭐⭐</div>
+    <div class="section-sub">기출 포인트: 필드 번호와 의미, 특히 4번째(옵션) 필드</div>
+
+    <div class="code-block">
+<span class="comment"># &lt;파일시스템&gt; &lt;마운트포인트&gt; &lt;타입&gt; &lt;옵션&gt; &lt;dump&gt; &lt;pass&gt;</span>
+<span class="comment">#     1            2            3      4       5      6</span>
+UUID=1234-5678  /           ext4  defaults  1  1
+/dev/sdb1       /mnt/backup ext4  defaults  0  2
+/dev/sr0        /mnt/cdrom  iso9660 noauto,user 0 0
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>필드</th><th>내용</th></tr>
+        <tr><td class="yellow">1번째</td><td>장치명, UUID, LABEL, 네트워크 주소</td></tr>
+        <tr><td class="yellow">2번째</td><td>마운트 포인트</td></tr>
+        <tr><td class="yellow">3번째</td><td>파일시스템 타입</td></tr>
+        <tr><td class="yellow">4번째 <span class="hot">★</span></td><td>마운트 옵션 (defaults, ro, rw, noauto 등)</td></tr>
+        <tr><td class="yellow">5번째</td><td>dump (백업 여부, 0=안함, 1=함)</td></tr>
+        <tr><td class="yellow">6번째 <span class="hot">★</span></td><td>fsck 검사 순서 (0=안함, 1=루트, 2=나머지)</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>관련 파일</th><th>설명</th></tr>
+        <tr><td class="mono hot">/etc/fstab</td><td>파일시스템 <strong>정적</strong> 정보. 부팅 시 마운트할 파티션 정보</td></tr>
+        <tr><td class="mono hot">/etc/mtab</td><td>현재 <strong>마운트된</strong> 파일시스템 정보</td></tr>
+        <tr><td class="mono">/etc/mounts</td><td>파일시스템이 실제 마운트 여부와 관계없이 보여줌</td></tr>
+        <tr><td class="mono">/proc/partitions</td><td>현재 시스템의 파티션 정보</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">디스크 쿼터 (quota)</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>설명</th></tr>
+        <tr><td class="mono hot">edquota</td><td>vi 편집기로 디스크 쿼터 설정. <code>-p</code>: 다른 사용자와 동일하게 설정</td></tr>
+        <tr><td class="mono">setquota</td><td>명령행에서 직접 디스크 사용량 할당</td></tr>
+        <tr><td class="mono">quota</td><td>현재 사용자 디스크 사용량 확인</td></tr>
+        <tr><td class="mono">repquota</td><td>파일시스템 사용량 보고서 생성</td></tr>
+        <tr><td class="mono">xfs_quota</td><td>XFS 파일시스템 디스크 쿼터</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">LVM (Logical Volume Manager) ⭐</div>
+    <div class="box box-purple">
+      <div class="box-title">🔑 LVM 구성 순서 (반드시 암기!)</div>
+      <p style="font-size:18px;text-align:center;margin:8px 0"><strong>PV → VG → LV</strong></p>
+      <p>Physical Volume → Volume Group → Logical Volume</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>용어</th><th>풀네임</th><th>설명</th></tr>
+        <tr><td class="mono hot">PV</td><td>Physical Volume</td><td>물리적 디스크/파티션</td></tr>
+        <tr><td class="mono hot">PE</td><td>Physical Extent</td><td>PV의 블록 단위</td></tr>
+        <tr><td class="mono hot">VG</td><td>Volume Group</td><td>PV들의 묶음</td></tr>
+        <tr><td class="mono hot">LV</td><td>Logical Volume</td><td>VG에서 생성하는 논리적 파티션</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">RAID</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>레벨</th><th>기술</th><th>특징</th><th>최소 디스크</th></tr>
+        <tr><td class="hot">RAID-0</td><td>스트라이핑</td><td>속도 ↑, 백업 없음 (하나 고장 시 전체 손실)</td><td>2개</td></tr>
+        <tr><td class="hot">RAID-1</td><td>미러링</td><td>디스크 이중화, 50% 효율</td><td>2개</td></tr>
+        <tr><td class="hot">RAID-5</td><td>패리티 1개</td><td>1개 고장 복구 가능</td><td>3개</td></tr>
+        <tr><td class="hot">RAID-6</td><td>패리티 2개</td><td>2개 고장 복구 가능</td><td>4개</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 용량 계산</div>
+      <p>RAID-0: 전체 용량 사용 | RAID-1: 절반 | RAID-5: (n-1)개 용량 | RAID-6: (n-2)개 용량</p>
+      <p>예) 10GB 디스크 8개, 스페어 1개, RAID-5 → <strong>(8-1-1) × 10 = 60GB</strong></p>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic01.html" class="page-btn">← Topic 01: 권한</a>
+    <a href="topic03.html" class="page-btn center">Topic 03: 셸 →</a>
+  </div>
+</div>
+</body>
+</html>

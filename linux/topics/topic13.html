@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 13 — OSI 7계층 & 네트워크 장비</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 13 · OSI 7계층 & 네트워크 장비</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">OSI 7계층 ⭐⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>계층</th><th>이름</th><th>PDU</th><th>장비</th><th>프로토콜</th></tr>
+        <tr><td class="yellow">7</td><td class="hot">응용(Application)</td><td>메시지</td><td>게이트웨이</td><td>HTTP, FTP, SMTP, SSH, DNS, DHCP</td></tr>
+        <tr><td class="yellow">6</td><td>표현(Presentation)</td><td>메시지</td><td>-</td><td>부호화, 압축, 암호화</td></tr>
+        <tr><td class="yellow">5</td><td>세션(Session)</td><td>메시지</td><td>-</td><td>연결 설정/유지/해제, 동기화</td></tr>
+        <tr><td class="yellow">4</td><td class="hot">전송(Transport)</td><td class="hot">세그먼트</td><td>-</td><td>TCP(세그먼트), UDP(데이터그램)</td></tr>
+        <tr><td class="yellow">3</td><td class="hot">네트워크(Network)</td><td class="hot">패킷</td><td class="hot">라우터</td><td>IP, ICMP, ARP, RARP</td></tr>
+        <tr><td class="yellow">2</td><td class="hot">데이터링크(DataLink)</td><td class="hot">프레임</td><td class="hot">브리지, 스위치</td><td>Ethernet, MAC</td></tr>
+        <tr><td class="yellow">1</td><td class="hot">물리(Physical)</td><td class="hot">비트</td><td class="hot">리피터, 허브, 케이블</td><td>-</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 암기법 (하위→상위)</div>
+      <p>물데네전세표응 | 비트→프레임→패킷→세그먼트→메시지</p>
+      <p>OSI 7계층 제정: <strong>ISO</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">네트워크 장비 ⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>장비</th><th>계층</th><th>역할</th></tr>
+        <tr><td class="hot">리피터(Repeater)</td><td>1계층(물리)</td><td>신호 재생/증폭, 물리적 거리 확장</td></tr>
+        <tr><td class="hot">허브(Hub)</td><td>1계층(물리)</td><td>신호 증폭, 모든 포트로 전달</td></tr>
+        <tr><td class="hot">브리지(Bridge)</td><td>2계층(데이터링크)</td><td>MAC 주소 기반으로 목적지 포트로 프레임 전달</td></tr>
+        <tr><td class="hot">스위치(Switch)</td><td>2계층(데이터링크)</td><td>브리지와 유사, 더 많은 포트</td></tr>
+        <tr><td class="hot">라우터(Router)</td><td>3계층(네트워크)</td><td>IP 기반 경로 선택, 1~3계층 지원</td></tr>
+        <tr><td class="hot">게이트웨이(Gateway)</td><td>7계층(응용)</td><td>서로 다른 프로토콜 연결, 최상위 계층</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 OSI 계층 기준 많은 계층 지원</div>
+      <p>Gateway(7계층) > Router(3계층) > Bridge/Switch(2계층) > Hub/Repeater(1계층)</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">LAN 구성 방식 (토폴로지)</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>방식</th><th>특징</th></tr>
+        <tr><td class="hot">버스(Bus)형</td><td>하나의 케이블에 모든 장치 연결. 충돌 발생 가능. 설치 간단</td></tr>
+        <tr><td class="hot">링(Ring)형</td><td>원형으로 연결. 충돌 없음. 노드 추가 어려움. 하나 고장 시 전체 중단 가능</td></tr>
+        <tr><td class="hot">성(Star)형</td><td>중앙 제어기(허브/스위치) 중심. 중앙 고장 시 전체 중단. 설치 비용 많음</td></tr>
+        <tr><td class="hot">망(Mesh)형</td><td>모든 장치 상호 연결. 신뢰성 최고. 비용 많음. 하나 고장해도 영향 적음</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 기출 포인트</div>
+      <p>장애 발생 시 다른 시스템 영향 적고 신뢰성 높음 → <strong>망(Mesh)형</strong></p>
+      <p>충돌 없고 성능 저하 적으나 노드 추가 어려움 → <strong>링(Ring)형</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">TCP 3-Way Handshake</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>패킷</th><th>방향</th><th>상태</th></tr>
+        <tr><td class="mono hot">SYN</td><td>클라이언트 → 서버</td><td>서버: half-open 상태</td></tr>
+        <tr><td class="mono hot">SYN/ACK</td><td>서버 → 클라이언트</td><td>-</td></tr>
+        <tr><td class="mono hot">ACK</td><td>클라이언트 → 서버</td><td>연결 완료: ESTABLISHED</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>netstat 상태</th><th>의미</th></tr>
+        <tr><td class="mono hot">LISTEN</td><td>서버가 클라이언트 연결 대기</td></tr>
+        <tr><td class="mono hot">ESTABLISHED</td><td>3-Way Handshake 완료, 연결됨</td></tr>
+        <tr><td class="mono">SYN_SENT</td><td>로컬에서 원격으로 연결 요청(SYN 보냄)</td></tr>
+        <tr><td class="mono">SYN_RECEIVED</td><td>원격에서 접속 요구 받아 응답했으나 확인 안됨</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic12.html" class="page-btn">← Topic 12: IP 클래스</a>
+    <a href="topic14.html" class="page-btn center">Topic 14: 포트번호 →</a>
+  </div>
+</div>
+</body>
+</html>

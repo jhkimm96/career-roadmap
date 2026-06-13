@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 03 — 셸 정리</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 03 · 셸 정리</span>
+  <span class="nav-badge">자주 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">셸 종류</div>
+    <div class="section-sub">기출 포인트: 셸 이름-경로-개발자 매칭, GNU 프로젝트 셸</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>계열</th><th>셸</th><th>경로</th><th>개발자/특징</th></tr>
+        <tr><td rowspan="4">Bourne<br>계열</td><td class="mono hot">본셸(sh)</td><td class="mono">/bin/sh</td><td>스티븐 본, 벨 연구소, 기본 셸</td></tr>
+        <tr><td class="mono hot">콘셸(ksh)</td><td class="mono">/bin/ksh</td><td>AT&T 데이비드 콘, 본셸 확장</td></tr>
+        <tr><td class="mono hot">배쉬셸(bash)</td><td class="mono">/bin/bash</td><td><span class="yellow">GNU 프로젝트</span>, Linux 표준, POSIX 호환</td></tr>
+        <tr><td class="mono">지셸(zsh)</td><td class="mono">/bin/zsh</td><td>Korn shell 재작성</td></tr>
+        <tr><td rowspan="2">C셸<br>계열</td><td class="mono hot">C셸(csh)</td><td class="mono">/bin/csh</td><td>버클리대학 <span class="yellow">빌 조이</span>, C언어 기반</td></tr>
+        <tr><td class="mono">tcsh</td><td class="mono">/bin/tcsh</td><td>확장 C셸, 1981년, BSD계열</td></tr>
+        <tr><td>기타</td><td class="mono">dash</td><td class="mono">/bin/dash</td><td>Debian에서 sh 대체품</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 기출 암기</div>
+      <p><strong>GNU 프로젝트</strong> 셸 = <strong>bash</strong> (브라이언 폭스가 개발)</p>
+      <p>등장 순서: sh → csh → tcsh → ksh → bash → zsh</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">셸 확인 & 변경</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>방법</th><th>명령어</th><th>설명</th></tr>
+        <tr><td>현재 셸 확인</td><td class="mono hot">echo $SHELL</td><td>로그인 후 사용 중인 셸 확인</td></tr>
+        <tr><td>사용 가능 셸 목록</td><td class="mono hot">cat /etc/shells</td><td>시스템에서 사용 가능한 셸 목록</td></tr>
+        <tr><td>사용 가능 셸 목록</td><td class="mono">chsh -l</td><td>/etc/shells 내용 나열</td></tr>
+        <tr><td>특정 사용자 셸 확인</td><td class="mono">grep 사용자 /etc/passwd</td><td>/etc/passwd 파일에서 확인</td></tr>
+        <tr><td>셸 변경</td><td class="mono hot">chsh -s /bin/bash</td><td>로그인 셸 변경</td></tr>
+        <tr><td>관리자 셸 변경</td><td class="mono">usermod -s /bin/bash ihd</td><td>관리자가 특정 사용자 셸 변경</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>파일</th><th>내용</th></tr>
+        <tr><td class="mono hot">/etc/shells</td><td>사용 가능한 셸 목록. chsh로 변경 가능한 셸 나열</td></tr>
+        <tr><td class="mono hot">/etc/passwd</td><td>각 사용자의 로그인 셸 정보 저장</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+$ echo $SHELL
+/bin/bash
+
+$ chsh -l          <span class="comment"># 사용 가능한 셸 목록</span>
+$ chsh -s /bin/zsh <span class="comment"># 기본 셸을 zsh로 변경</span>
+$ usermod -s /bin/bash ihd  <span class="comment"># ihd 사용자 셸 bash로 변경</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">환경설정 파일</div>
+    <div class="section-sub">기출 포인트: 전역/지역 구분, 각 파일의 역할</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>파일</th><th>역할</th></tr>
+        <tr><td rowspan="2" class="hot">전역 설정<br>(/etc)</td><td class="mono hot">/etc/profile</td><td>모든 사용자에게 적용되는 <strong>환경변수</strong>와 시작관련 프로그램 설정</td></tr>
+        <tr><td class="mono hot">/etc/bashrc</td><td>모든 사용자에게 적용되는 <strong>alias와 함수</strong> 설정</td></tr>
+        <tr><td rowspan="4" class="green">지역 설정<br>(~/)</td><td class="mono hot">~/.bash_profile</td><td>일반 사용자가 <strong>PATH 같은 환경변수</strong> 변경할 때 사용</td></tr>
+        <tr><td class="mono hot">~/.bashrc</td><td><strong>별칭(alias)과 함수</strong>를 지역적으로 제어</td></tr>
+        <tr><td class="mono">~/.bash_history</td><td>사용자가 입력한 명령 기록 저장</td></tr>
+        <tr><td class="mono">~/.bash_logout</td><td>로그아웃 시 실행</td></tr>
+        <tr><td>기타</td><td class="mono">/etc/profile.d</td><td>응용프로그램 시작 시 필요한 스크립트 위치</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 구분 암기</div>
+      <p>/etc/profile = 전역 <strong>환경변수</strong> | /etc/bashrc = 전역 <strong>alias/함수</strong></p>
+      <p>~/.bash_profile = 지역 <strong>환경변수</strong> | ~/.bashrc = 지역 <strong>alias/함수</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">주요 환경 변수</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>변수</th><th>설명</th></tr>
+        <tr><td class="mono hot">SHELL</td><td>현재 사용 중인 셸</td></tr>
+        <tr><td class="mono hot">PATH</td><td>실행 파일 검색 경로</td></tr>
+        <tr><td class="mono hot">HOME</td><td>홈 디렉터리</td></tr>
+        <tr><td class="mono hot">PS1</td><td>셸 프롬프트 모양 결정 (1차 프롬프트)</td></tr>
+        <tr><td class="mono hot">PS2</td><td>2차 프롬프트 (명령어가 다음 줄로 연장될 때)</td></tr>
+        <tr><td class="mono">TERM</td><td>터미널 종류</td></tr>
+        <tr><td class="mono">TMOUT</td><td>로그아웃 관련 시간 제어</td></tr>
+        <tr><td class="mono hot">LANG</td><td>프로그램 사용 시 기본 지원 언어. <code>LANG=C</code> → 영어 / <code>echo $LANG</code>으로 확인</td></tr>
+        <tr><td class="mono">PROMT</td><td>C셸에서 사용, 프롬프트 형식 지정</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">프롬프트 형식 (PS1)</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>특수문자</th><th>의미</th></tr>
+        <tr><td class="mono yellow">\h</td><td>호스트명</td></tr>
+        <tr><td class="mono yellow">\u</td><td>현재 사용자 이름</td></tr>
+        <tr><td class="mono yellow">\t</td><td>24시간 형식 현재 시간</td></tr>
+        <tr><td class="mono yellow">\d</td><td>요일 월 일 형태로 날짜</td></tr>
+        <tr><td class="mono yellow">\w</td><td>현재 작업 디렉터리 <strong>절대 경로</strong></td></tr>
+        <tr><td class="mono yellow">\W</td><td>현재 작업 디렉터리의 <strong>마지막 디렉터리명</strong></td></tr>
+        <tr><td class="mono yellow">\s</td><td>사용 중인 셸 이름</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+<span class="comment"># 예시: [사용자@호스트 디렉터리]$</span>
+PS1='[\u@\h \W]\$ '
+<span class="comment"># 결과: [posein@www ~]$</span>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic02.html" class="page-btn">← Topic 02: 파일시스템</a>
+    <a href="topic04.html" class="page-btn center">Topic 04: bash 주요 기능 →</a>
+  </div>
+</div>
+</body>
+</html>

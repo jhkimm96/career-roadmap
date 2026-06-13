@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 10 — 프린터 & 주변장치</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 10 · 프린터 & 주변장치</span>
+  <span class="nav-badge">자주 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">프린터 명령어 ⭐⭐</div>
+    <div class="section-sub">기출 포인트: BSD계열 vs System V계열 명령어 구분</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>계열</th><th>명령</th><th>설명</th></tr>
+        <tr><td rowspan="4" class="hot">BSD 계열</td><td class="mono hot">lpr</td><td>프린터 작업 요청. -#(매수), -r(파일삭제)</td></tr>
+        <tr><td class="mono hot">lpq</td><td>프린터 <strong>큐 작업 목록</strong> 출력</td></tr>
+        <tr><td class="mono hot">lprm</td><td>프린터 큐 대기 작업 삭제</td></tr>
+        <tr><td class="mono hot">lpc</td><td>라인 프린터 컨트롤 프로그램</td></tr>
+        <tr><td rowspan="3" class="green">System V 계열</td><td class="mono hot">lp</td><td>프린터 작업 요청. -n(매수)</td></tr>
+        <tr><td class="mono hot">lpstat</td><td>프린터 큐 <strong>작업 상태</strong> 확인</td></tr>
+        <tr><td class="mono hot">cancel</td><td>프린트 작업 취소</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 구분 암기</div>
+      <p>BSD: lpr/lpq/lprm/lpc (r이 들어감)</p>
+      <p>System V: lp/lpstat/cancel (r 없음)</p>
+      <p>lp는 System V 계열이라 BSD와 <strong>계열이 다름</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">프린터 관련 시스템</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>시스템</th><th>설명</th></tr>
+        <tr><td class="hot">LPRng</td><td>리눅스 초기 인쇄 시스템. 설정: /etc/printcap. <strong>RFC 1179</strong> 기반 → <span class="hot">RFC 1279 아님</span></td></tr>
+        <tr><td class="hot">CUPS</td><td><strong>애플</strong>이 개발한 오픈소스 프린팅 시스템. 설정: /etc/cups (<strong>큐 설정: /etc/cups/printers.conf</strong>). 웹기반 IPP 사용(http:631 포트) → <span class="hot">/etc/printcap은 LPRng의 것 (CUPS 아님)</span></td></tr>
+        <tr><td>system-config-printer</td><td>CentOS 7에서 X윈도 기반 프린터 설정 명령</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">사운드 카드</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>시스템</th><th>설명</th></tr>
+        <tr><td class="hot">OSS</td><td>Open Sound System. 리눅스에서 사운드 만들고 캡처하는 인터페이스. <strong>표준 유닉스 시스템 콜(POSIX)</strong></td></tr>
+        <tr><td class="hot">ALSA</td><td>Advanced Linux Sound Architecture. 사운드카드용 장비 드라이버. <strong>리눅스 커널 요소</strong></td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>설명</th></tr>
+        <tr><td class="mono">alsactl</td><td>ALSA 사운드 카드 제어</td></tr>
+        <tr><td class="mono">alsamixer</td><td>커서 라이브러리 기반 오디오 프로그램</td></tr>
+        <tr><td class="mono">cdparanoia</td><td>오디오 CD에서 음악 파일 추출</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">스캐너</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>시스템</th><th>설명</th></tr>
+        <tr><td class="hot">SANE</td><td>Scanner Access Now Easy. 이미지 관련 하드웨어를 제어하는 API</td></tr>
+        <tr><td class="hot">XSANE</td><td>X based interface for the SANE. X윈도 기반 스캐너 프로그램. <strong>GTK+ 라이브러리</strong>. 실행: xsane</td></tr>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>설명</th></tr>
+        <tr><td class="mono">sane-find-scanner</td><td>SCSI/USB 스캐너 정보 출력</td></tr>
+        <tr><td class="mono hot">scanimage</td><td>이미지 스캔. 주요 옵션: <code>-x</code>(너비), <code>-y</code>(높이), <code>--format</code>(출력형식 지정)</td></tr>
+        <tr><td class="mono">scanadf</td><td>여러 개의 사진 스캔</td></tr>
+        <tr><td class="mono">xcam</td><td>GUI 기반 평판 스캐너/카메라 스캔</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic09.html" class="page-btn">← Topic 09: 압축</a>
+    <a href="topic11.html" class="page-btn center">Topic 11: X-Window →</a>
+  </div>
+</div>
+</body>
+</html>

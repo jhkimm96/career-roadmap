@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 05 — 프로세스 & 시그널</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../base.css">
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../index.html" class="back-btn">← 목록</a>
+  <span class="nav-title">Topic 05 · 프로세스 & 시그널</span>
+  <span class="nav-badge">🔥 매회 출제</span>
+</nav>
+<div class="content">
+
+  <div class="section">
+    <div class="section-title">fork() vs exec()</div>
+    <div class="section-sub">기출 포인트: 두 함수의 동작 방식 차이</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>함수</th><th>동작</th><th>메모리</th></tr>
+        <tr><td class="mono hot">fork()</td><td>기존 프로세스를 <strong>복제</strong>해서 새 프로세스 생성</td><td>새 메모리 할당 O</td></tr>
+        <tr><td class="mono hot">exec()</td><td>호출 프로세스가 새 프로세스로 <strong>교체</strong></td><td>새 메모리 할당 X</td></tr>
+      </table>
+    </div>
+    <div class="box box-blue">
+      <div class="box-title">📌 동작 원리</div>
+      <p>사용자 로그인 → <strong>bash 프로세스</strong> 할당 → 명령어 입력 → <strong>fork()</strong> 형태로 자식 프로세스 생성</p>
+      <p>CentOS 7: 부팅 시 커널이 <strong>systemd</strong> 발생 → PID 1 부여 → 다른 서비스는 fork()로 자식 생성</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Daemon 종류</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>종류</th><th>특징</th><th>예시</th></tr>
+        <tr><td class="hot">standalone</td><td>항상 메모리에 상주, 빈번한 요청에 적합, 항상 켜짐</td><td>http, mysql, sendmail</td></tr>
+        <tr><td class="hot">inetd (슈퍼데몬)</td><td>요청 있을 때만 실행, 메모리 효율적, 자다가 일어남</td><td>telnet, ftp, rlogin</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 암기</div>
+      <p>standalone = 항상 켜짐, 빠름 | inetd = 필요할 때만, 메모리 절약</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">시그널 번호 ⭐⭐⭐</div>
+    <div class="section-sub">기출 포인트: SIGINT(2), SIGKILL(9), SIGTERM(15), SIGTSTP(20) 번호</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>번호</th><th>이름</th><th>발생 조건</th><th>동작</th></tr>
+        <tr><td class="yellow">1</td><td class="mono hot">SIGHUP</td><td>터미널 연결 끊김</td><td>종료 후 재시작</td></tr>
+        <tr><td class="yellow">2</td><td class="mono hot">SIGINT</td><td><strong>Ctrl+C</strong></td><td>강제종료</td></tr>
+        <tr><td class="yellow">3</td><td class="mono">SIGQUIT</td><td>Ctrl+\</td><td>코어 덤프</td></tr>
+        <tr><td class="yellow">9</td><td class="mono hot">SIGKILL</td><td>프로세스 강제종료 시</td><td><strong>무조건 강제종료</strong> (무시 불가)</td></tr>
+        <tr><td class="yellow">15</td><td class="mono hot">SIGTERM</td><td>kill 명령 기본 시그널</td><td><strong>정상종료</strong> 시도</td></tr>
+        <tr><td class="yellow">18</td><td class="mono">SIGCONT</td><td>중지된 프로세스 재실행</td><td>무시</td></tr>
+        <tr><td class="yellow">19</td><td class="mono">SIGSTOP</td><td>-</td><td>SIGCONT 받을 때까지 정지</td></tr>
+        <tr><td class="yellow">20</td><td class="mono hot">SIGTSTP</td><td><strong>Ctrl+Z</strong></td><td>프로세스 대기(suspend)</td></tr>
+      </table>
+    </div>
+    <div class="box box-red">
+      <div class="box-title">⭐ 반드시 암기</div>
+      <p>Ctrl+C = <strong>2(SIGINT)</strong> | Ctrl+Z = <strong>20(SIGTSTP)</strong></p>
+      <p>kill 기본 = <strong>15(SIGTERM)</strong> | 강제종료 = <strong>9(SIGKILL)</strong></p>
+      <p>시그널 번호 확인: <code>kill -l</code></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">프로세스 관련 명령어</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>설명</th><th>주요 옵션</th></tr>
+        <tr><td class="mono hot">ps</td><td>실행 중인 프로세스 상태</td><td class="mono">a(모든), u(사용자+시작시간), x(터미널없는것 포함)</td></tr>
+        <tr><td class="mono hot">top</td><td>실시간 CPU/메모리 모니터링</td><td class="mono">k(kill), n(개수지정), r(NI값변경), q(종료)</td></tr>
+        <tr><td class="mono hot">pstree</td><td>트리 구조로 프로세스 표시</td><td class="mono">p(PID표시), a(인자포함), h(현재프로세스강조)</td></tr>
+        <tr><td class="mono hot">kill</td><td>PID로 프로세스 종료</td><td class="mono">-l(시그널목록), -9(강제종료)</td></tr>
+        <tr><td class="mono hot">killall</td><td><strong>프로세스 이름</strong>으로 종료</td><td>ex) killall firefox</td></tr>
+        <tr><td class="mono hot">jobs</td><td>백그라운드 작업 목록 확인</td><td>-l(PID포함)</td></tr>
+        <tr><td class="mono hot">nohup</td><td>터미널 닫혀도 백그라운드 계속 실행</td><td>명령어 뒤에 &amp; 함께 사용</td></tr>
+      </table>
+    </div>
+    <div class="code-block">
+ps aux              <span class="comment"># 모든 프로세스 정보</span>
+kill 1234           <span class="comment"># PID 1234 정상종료(SIGTERM)</span>
+kill -9 1234        <span class="comment"># PID 1234 강제종료</span>
+kill %2             <span class="comment"># 작업번호 2번 백그라운드 종료</span>
+killall firefox     <span class="comment"># firefox 이름의 모든 프로세스 종료</span>
+nohup tar cvf backup.tar /data &amp;  <span class="comment"># 백그라운드로 계속 실행</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ps 출력 항목</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>항목</th><th>설명</th></tr>
+        <tr><td class="mono hot">PID</td><td>프로세스 ID</td></tr>
+        <tr><td class="mono hot">RSS</td><td>실제 사용하는 <strong>메모리</strong> (Resident Set Size) → <span class="hot">CPU 사용량 아님 — 틀린 설명 주의</span></td></tr>
+        <tr><td class="mono">VSZ</td><td>가상 메모리 사용량</td></tr>
+        <tr><td class="mono">STAT</td><td>프로세스 상태</td></tr>
+      </table>
+    </div>
+    <div class="box box-red">
+      <div class="box-title">⚠️ 기출 틀린 설명 주의</div>
+      <ul>
+        <li>kill 명령 기본 시그널 = <span class="green">SIGTERM(15)</span> → <span class="hot">SIGKILL(9) 아님</span></li>
+        <li>lsof = <strong>열린 파일 목록</strong> 확인 → <span class="hot">메모리 맵(Memory Map) 정보 아님</span></li>
+        <li>killall = <strong>프로세스 이름</strong>으로 종료 → <span class="hot">PID 사용 아님</span></li>
+        <li>renice = <strong>PID</strong> 사용 → <span class="hot">프로세스명 사용 아님</span></li>
+        <li><code>nice -10 bash</code> → NI값이 10 <strong>증가</strong> → 우선순위 <strong>낮아짐</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ps 상태값 (STAT)</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>코드</th><th>상태</th></tr>
+        <tr><td class="mono hot">R</td><td>실행 중 또는 실행 가능한 상태</td></tr>
+        <tr><td class="mono hot">S</td><td>특정 이벤트가 끝나기를 기다리는 상태</td></tr>
+        <tr><td class="mono hot">Z</td><td><strong>좀비(Zombie)</strong> - 종료되었으나 부모 프로세스에 회수되지 않아 메모리 점유</td></tr>
+        <tr><td class="mono hot">T</td><td>정지된 상태</td></tr>
+        <tr><td class="mono hot">D</td><td>디스크 I/O에 의해 대기 중인 상태</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">우선순위 (NI 값)</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>명령어</th><th>사용법</th><th>특징</th></tr>
+        <tr><td class="mono hot">nice</td><td class="mono">nice -n 값 프로세스명</td><td>새 프로세스 시작 시 우선순위 설정. 기본값 <strong>10</strong></td></tr>
+        <tr><td class="mono hot">renice</td><td class="mono">renice 값 PID</td><td>실행 중인 프로세스 우선순위 변경. PID 사용</td></tr>
+      </table>
+    </div>
+    <div class="box box-yellow">
+      <div class="box-title">📌 NI 값 범위</div>
+      <p>범위: <strong>-20 ~ 19</strong> (-20이 최고 우선순위, 19가 최저)</p>
+      <p>일반 사용자: NI값 <strong>증가</strong>만 가능 | root: 증가/감소 모두 가능</p>
+      <p>nice 옵션 없으면 디폴트 <strong>10</strong> 증가</p>
+    </div>
+    <div class="code-block">
+nice -10 bash       <span class="comment"># bash를 NI +10으로 실행 (기본값이 -5이면 -5+10=5)</span>
+renice 20 3241      <span class="comment"># PID 3241의 NI값을 20으로 변경</span>
+renice -10 bash     <span class="comment"># bash 프로세스명으로 NI -10 설정</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">포그라운드 ↔ 백그라운드 전환</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>키/명령</th><th>동작</th></tr>
+        <tr><td class="mono hot">Ctrl+Z</td><td>포그라운드 → 일시중지(suspend)</td></tr>
+        <tr><td class="mono hot">bg [%작업번호]</td><td>중지된 작업을 백그라운드로 재실행</td></tr>
+        <tr><td class="mono hot">fg [%작업번호]</td><td>백그라운드 → 포그라운드로 전환</td></tr>
+        <tr><td class="mono hot">Ctrl+C</td><td>포그라운드 작업 종료</td></tr>
+        <tr><td class="mono hot">명령어 &amp;</td><td>처음부터 백그라운드로 실행</td></tr>
+        <tr><td class="mono hot">jobs</td><td>백그라운드 작업 목록 확인</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 fg→bg 전환 순서</div>
+      <p>Ctrl+Z (일시중지) → bg 명령 수행</p>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="topic04.html" class="page-btn">← Topic 04: bash 기능</a>
+    <a href="topic06.html" class="page-btn center">Topic 06: crontab →</a>
+  </div>
+</div>
+</body>
+</html>
