@@ -300,26 +300,61 @@ const ALL_Q = [
 ];
 
 // ──────────────────────────────────────────────────────────────
-// 보기 섞기 유틸
-// opts 배열을 셔플하고, 정답 텍스트(ansText)의 새 인덱스를 반환
+// 오답 보기 풀 — 정답이 아닌 보기들을 랜덤으로 뽑을 때 사용
 // ──────────────────────────────────────────────────────────────
-function shuffleOpts(opts, ansText) {
-  const shuffled = [...opts];
-  for (let i = shuffled.length - 1; i > 0; i--) {
+const WRONG_POOL = {
+  // 창업의 요소 (정답:인적/상품/물적 중 하나, 오답 후보)
+  q1:  ['자본 요소','재무 요소','마케팅 요소','홍보 요소'],
+  // 창업의 특징 (정답:3가지 특징 중 하나, 오답 후보)
+  q3:  ['안정적 수익 보장','낮은 리스크','고용 안정','빠른 성공 보장'],
+  // 창업자 역량 (정답:4가지 역량 중 하나, 오답 후보)
+  q4:  ['고급 학벌','화려한 경력','좋은 외모','높은 인지도'],
+  // 창업의 목적 (정답:4가지 목적 중 하나, 오답 후보)
+  q7:  ['시장 독점','경쟁사 제거','안정적 고용 보장','정부 보조금 수령'],
+};
+
+// ──────────────────────────────────────────────────────────────
+// 배열 셔플
+// ──────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  const ansIdx = shuffled.indexOf(ansText);
-  return { shuffled, ansIdx };
+  return a;
+}
+
+// ──────────────────────────────────────────────────────────────
+// 보기 구성
+// correctTexts: 정답 후보 풀, ansText: 이번 정답, wrongPool: 오답 후보
+// correctCount: 정답 제외 정답풀에서 몇 개 뽑을지 (보기총수 - 1 - wrongCount)
+// ──────────────────────────────────────────────────────────────
+function buildOpts(raw, poolKey) {
+  const ansText   = raw.ansText;
+  const wrongPool = WRONG_POOL[poolKey] || [];
+
+  // 정답 풀 = opts에서 정답 제외한 나머지 (원래 정답들)
+  const correctPool = raw.opts.filter(o => o !== ansText);
+
+  // 오답 후보에서 중복 없이 랜덤 1개 선택
+  const shuffledWrong = shuffle(wrongPool);
+  const wrong = shuffledWrong[0];
+
+  // 정답풀에서 2개 랜덤 선택
+  const shuffledCorrect = shuffle(correctPool);
+  const picked = shuffledCorrect.slice(0, 2);
+
+  // 보기 4개 = 정답 1 + 정답풀 2 + 오답 1 → 섞기
+  const opts = shuffle([ansText, ...picked, wrong]);
+  const ans  = opts.indexOf(ansText);
+  return { opts, ans };
 }
 
 // ──────────────────────────────────────────────────────────────
 // 퀴즈 셋 구성
-// 변형 있는 문제: 랜덤 1개 선택
-// 객관식: 보기를 섞고 정답 인덱스를 계산
 // ──────────────────────────────────────────────────────────────
 function buildQuizSet() {
-  // 그룹핑
   const groups = {};
   ALL_Q.forEach(q => {
     const key = q.variantOf || q.n;
@@ -329,14 +364,21 @@ function buildQuizSet() {
 
   const keys = Object.keys(groups).map(Number).sort((a, b) => a - b);
   return keys.map(k => {
-    const g = groups[k];
-    // 랜덤 변형 선택
+    const g   = groups[k];
     const raw = g[Math.floor(Math.random() * g.length)];
     if (raw.type === 'subjective') return { ...raw };
 
-    // 보기 셔플
-    const { shuffled, ansIdx } = shuffleOpts(raw.opts, raw.ansText);
-    return { ...raw, opts: shuffled, ans: ansIdx };
+    // 오답 풀이 있는 문제는 풀에서 랜덤 오답 뽑기
+    const poolKey = `q${raw.variantOf || raw.n}`;
+    if (WRONG_POOL[poolKey]) {
+      const { opts, ans } = buildOpts(raw, poolKey);
+      return { ...raw, opts, ans };
+    }
+
+    // 나머지는 기존 보기 순서만 셔플
+    const shuffled = shuffle(raw.opts);
+    const ans      = shuffled.indexOf(raw.ansText);
+    return { ...raw, opts: shuffled, ans };
   });
 }
 
