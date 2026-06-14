@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>외식 창업의 이해 — 개념 연습</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #2563EB; --blue-light: #DBEAFE; --blue-mid: #93C5FD;
+    --green: #16A34A; --green-light: #DCFCE7;
+    --red: #DC2626; --red-light: #FEE2E2;
+    --amber: #D97706; --amber-light: #FEF3C7;
+    --gray-50: #F9FAFB; --gray-100: #F3F4F6; --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF; --gray-600: #4B5563; --gray-800: #1F2937; --gray-900: #111827;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #F0F4FF; color: var(--gray-900);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 2rem 1rem 4rem;
+  }
+  .site-header { width: 100%; max-width: 700px; margin-bottom: 2rem; text-align: center; }
+  .site-header .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+  .site-header h1 { font-size: 26px; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+  .site-header p { margin-top: 8px; font-size: 14px; color: var(--gray-600); }
+  .nav-link { display: inline-block; margin-top: 12px; font-size: 13px; color: var(--blue); text-decoration: none; padding: 6px 14px; border: 1.5px solid var(--blue-mid); border-radius: 20px; }
+  .nav-link:hover { background: var(--blue-light); }
+
+  .card { width: 100%; max-width: 700px; background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.05); }
+
+  .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+  .progress-bar { flex: 1; height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width .35s ease; }
+  .progress-label { font-size: 13px; color: var(--gray-400); white-space: nowrap; }
+  .score-badge { font-size: 13px; font-weight: 500; color: var(--green); background: var(--green-light); padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+
+  .q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .q-num { font-size: 12px; font-weight: 700; color: var(--green); background: var(--green-light); padding: 2px 10px; border-radius: 20px; }
+  .q-slide { font-size: 11px; color: var(--gray-400); background: var(--gray-100); padding: 2px 8px; border-radius: 20px; }
+  .q-type-badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: #EDE9FE; color: #5B21B6; }
+
+  .q-text { font-size: 16px; font-weight: 500; line-height: 1.7; color: var(--gray-900); margin-bottom: 1.25rem; }
+
+  .options { display: grid; gap: 8px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius); cursor: pointer; font-size: 14px;
+    color: var(--gray-800); background: #fff; text-align: left;
+    transition: border-color .15s, background .15s, transform .1s; line-height: 1.5; width: 100%;
+  }
+  .opt:hover:not(:disabled) { border-color: #6EE7B7; background: var(--green-light); transform: translateY(-1px); }
+  .opt .letter {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--gray-100); color: var(--gray-600);
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+  }
+  .opt.selected { border-color: var(--green); background: var(--green-light); }
+  .opt.selected .letter { background: var(--green); color: #fff; }
+  .opt.correct { border-color: var(--green); background: var(--green-light); }
+  .opt.correct .letter { background: var(--green); color: #fff; }
+  .opt.wrong { border-color: var(--red); background: var(--red-light); }
+  .opt.wrong .letter { background: var(--red); color: #fff; }
+  .opt:disabled { cursor: default; transform: none; }
+
+  .feedback { margin-top: 1rem; padding: 14px 16px; border-radius: var(--radius); font-size: 14px; line-height: 1.7; display: none; }
+  .feedback.visible { display: block; }
+  .feedback.correct { background: var(--green-light); border-left: 4px solid var(--green); color: #064E3B; }
+  .feedback.wrong   { background: var(--red-light);   border-left: 4px solid var(--red);   color: #7F1D1D; }
+  .feedback strong { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  .slide-ref { font-size: 11px; color: var(--gray-400); margin-top: 8px; }
+
+  .btn-row { display: flex; gap: 8px; margin-top: 1.25rem; flex-wrap: wrap; align-items: center; }
+  .spacer { flex: 1; }
+  .btn {
+    padding: 9px 20px; border-radius: var(--radius-sm); font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif; font-weight: 500; cursor: pointer;
+    border: 1.5px solid var(--gray-200); background: #fff; color: var(--gray-800);
+    transition: background .15s, border-color .15s, transform .1s;
+  }
+  .btn:hover:not(:disabled) { background: var(--gray-100); border-color: var(--gray-400); transform: translateY(-1px); }
+  .btn.primary { background: var(--green); color: #fff; border-color: var(--green); }
+  .btn.primary:hover:not(:disabled) { background: #15803D; border-color: #15803D; }
+  .btn:disabled { opacity: .4; cursor: default; transform: none; }
+
+  .score-screen { text-align: center; padding: 1rem 0; }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--green); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+  .score-circle .big   { font-size: 36px; font-weight: 700; color: #fff; line-height: 1; }
+  .score-circle .small { font-size: 13px; color: #A7F3D0; margin-top: 2px; }
+  .score-screen h2 { font-size: 20px; font-weight: 700; }
+  .score-screen > p { font-size: 14px; color: var(--gray-600); margin-top: 4px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 1.5rem 0; }
+  .result-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--gray-50); border-radius: var(--radius-sm); text-align: left; cursor: pointer; transition: background .15s; }
+  .result-item:hover { background: var(--green-light); }
+  .ri-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .ri-dot.ok { background: var(--green); } .ri-dot.ng { background: var(--red); } .ri-dot.na { background: var(--amber); }
+  .ri-label { font-size: 12px; font-weight: 700; color: var(--gray-400); display: block; }
+  .ri-text  { font-size: 13px; color: var(--gray-800); line-height: 1.4; }
+  .divider { height: 1px; background: var(--gray-200); margin: 1.5rem 0; }
+
+  @media(max-width:480px) { .card{padding:1.25rem} .q-text{font-size:15px} .result-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="eyebrow">호원대학교 · 외식산업 창업과 경영</div>
+  <h1>개념 연습 문제</h1>
+  <p>PPT 내용 기반 · 총 23문제 · 보기 순서 랜덤</p>
+  <a href="quiz.html" class="nav-link">← 시험 대비 15문제로 이동</a>
+</header>
+
+<div class="card" id="card"></div>
+
+<script>
+const ALL_Q = [
+  // ── A. 창업의 3요소 (슬라이드 5) ──────────────────────────
+  {
+    id:'a1', slide:'슬라이드 5',
+    text:'창업자와 팀의 역량, 서비스 마인드, 리더십이 성공의 핵심이 되는 요소는?',
+    opts:['인적 요소','상품 요소','물적 요소','자본 요소'],
+    ansText:'인적 요소',
+    explain:'슬라이드 5 — 인적 요소는 창업자와 팀의 역량, 서비스 마인드, 리더십이 핵심입니다. 핵심 키워드: 전문지식, 기술, 대인관계 기술.'
+  },
+  {
+    id:'a2', slide:'슬라이드 5',
+    text:'사업아이템, 메뉴 맛, 차별성, 서비스, 분위기가 해당되는 요소는?',
+    opts:['인적 요소','상품 요소','물적 요소','자본 요소'],
+    ansText:'상품 요소',
+    explain:'슬라이드 5 — 상품 요소는 사업아이템, 메뉴 맛, 차별성, 서비스, 분위기를 포함합니다. 핵심: 수익성 검증된 상품 개발.'
+  },
+  {
+    id:'a3', slide:'슬라이드 5',
+    text:'자본, 시설, 주방설비, 인테리어, 재료가 해당되는 요소는?',
+    opts:['인적 요소','상품 요소','물적 요소','자본 요소'],
+    ansText:'물적 요소',
+    explain:'슬라이드 5 — 물적 요소는 자본, 시설, 주방설비, 인테리어, 재료를 포함합니다. 핵심: 자본이 입지·규모·시기를 결정.'
+  },
+
+  // ── B. 창업자 역량 (슬라이드 6) ──────────────────────────
+  {
+    id:'b1', slide:'슬라이드 6',
+    text:'경영·원가·법·위생 등 외식업 운영에 필요한 전반적인 지식과 조리·서비스 프로세스를 숙지하는 것이 해당되는 역량은?',
+    opts:['전문지식·기술','리더십·대인관계','상황판단력','창업자 자세','고급 학벌'],
+    ansText:'전문지식·기술',
+    explain:'슬라이드 6 — 전문지식·기술: 경영·원가·법·위생 지식과 조리/서비스 프로세스 숙지. 특히 식재료 관리와 위생 기준이 필수입니다.'
+  },
+  {
+    id:'b2', slide:'슬라이드 6',
+    text:'종업원을 이해하고 통솔하며 다양한 고객층에 응대하는 능력, 특히 종업원 동기부여와 갈등관리가 해당되는 역량은?',
+    opts:['전문지식·기술','리더십·대인관계','상황판단력','창업자 자세','고급 학벌'],
+    ansText:'리더십·대인관계',
+    explain:'슬라이드 6 — 리더십·대인관계: 종업원 동기부여와 갈등관리, 다양한 고객층 응대 능력이 핵심입니다.'
+  },
+  {
+    id:'b3', slide:'슬라이드 6',
+    text:'변화하는 트렌드를 파악하여 레스토랑을 조정하거나 통합하는 등 데이터 기반 의사결정이 필요한 역량은?',
+    opts:['전문지식·기술','리더십·대인관계','상황판단력','창업자 자세','고급 학벌'],
+    ansText:'상황판단력',
+    explain:'슬라이드 6 — 상황판단력: 변화하는 트렌드를 파악하여 적극적으로 대처하는 능력. 데이터 기반 의사결정이 필요합니다.'
+  },
+  {
+    id:'b4', slide:'슬라이드 6',
+    text:'지속적인 학습, 강인한 체력과 정신력, 변화에 대처하는 자세가 필요하며 특히 외식업의 특성상 건강 관리가 중요한 역량은?',
+    opts:['전문지식·기술','리더십·대인관계','상황판단력','창업자 자세','고급 학벌'],
+    ansText:'창업자 자세',
+    explain:'슬라이드 6 — 창업자 자세: 지속학습·실행력·체력·윤리가 키워드. 외식업은 체력 소모가 크므로 건강 관리가 중요합니다.'
+  },
+
+  // ── C. 창업의 특징 (슬라이드 8) ──────────────────────────
+  {
+    id:'c1', slide:'슬라이드 8',
+    text:'창업자의 경험 유무와 관계없이 성패를 예측하기 어려우며, 신규·무경험 창업자의 경우 특히 리스크가 높은 창업의 특징은?',
+    opts:['예측 어려움','자본 소요','창조성·모험성','안정적 수익 보장'],
+    ansText:'예측 어려움',
+    explain:'슬라이드 8 — 예측 어려움: 창업이란 창업자의 경험 유무와 관계없이 성패를 예측하기 어렵습니다. 파일럿·MVP 운영이 권장됩니다.'
+  },
+  {
+    id:'c2', slide:'슬라이드 8',
+    text:'입지·건물·시설 등 유형 자본뿐만 아니라 교육·브랜드·운전자금 등 무형 자본도 필요한 창업의 특징은?',
+    opts:['예측 어려움','자본 소요','창조성·모험성','안정적 수익 보장'],
+    ansText:'자본 소요',
+    explain:'슬라이드 8 — 자본 소요: 유형 자본(입지·건물·시설)과 무형 자본(교육·브랜드·운전자금) 모두 필요합니다.'
+  },
+  {
+    id:'c3', slide:'슬라이드 8',
+    text:'차별화 아이템과 검증 사이의 균형을 맞추는 것이 핵심인 창업의 특징은?',
+    opts:['예측 어려움','자본 소요','창조성·모험성','안정적 수익 보장'],
+    ansText:'창조성·모험성',
+    explain:'슬라이드 8 — 창조성·모험성: 창업은 창조적이며 모험적입니다. 차별화 아이템과 검증 사이의 균형이 핵심입니다.'
+  },
+
+  // ── D. 창업의 목적 (슬라이드 8) ──────────────────────────
+  {
+    id:'d1', slide:'슬라이드 8',
+    text:'레스토랑 운영을 통해 수익을 창출하는 것이 해당되는 창업의 목적은?',
+    opts:['이윤추구','사회적 가치','서비스 목적','자아실현','시장 독점'],
+    ansText:'이윤추구',
+    explain:'슬라이드 8 — 이윤추구: 창업의 궁극적인 목적은 레스토랑 운영을 통한 이윤추구입니다.'
+  },
+  {
+    id:'d2', slide:'슬라이드 8',
+    text:'창업을 통해 지역사회 기여, 일자리 창출 등 다양한 사회적 가치를 함께 추구하는 창업의 목적은?',
+    opts:['이윤추구','사회적 가치','서비스 목적','자아실현','시장 독점'],
+    ansText:'사회적 가치',
+    explain:'슬라이드 8 — 사회적 가치: 이윤추구 외에도 다양한 사회적 가치를 함께 추구하는 것이 창업의 목적 중 하나입니다.'
+  },
+  {
+    id:'d3', slide:'슬라이드 8',
+    text:'고객에게 음식과 서비스를 제공하는 것 자체가 해당되는 창업의 목적은?',
+    opts:['이윤추구','사회적 가치','서비스 목적','자아실현','시장 독점'],
+    ansText:'서비스 목적',
+    explain:'슬라이드 8 — 서비스 목적: 고객에게 음식과 서비스를 제공하는 것 자체가 창업의 목적이 될 수 있습니다.'
+  },
+  {
+    id:'d4', slide:'슬라이드 8',
+    text:'창업을 통해 자신의 꿈과 가능성을 실현하는 것이 해당되는 창업의 목적은?',
+    opts:['이윤추구','사회적 가치','서비스 목적','자아실현','시장 독점'],
+    ansText:'자아실현',
+    explain:'슬라이드 8 — 자아실현: 창업을 통해 자신의 꿈과 가능성을 실현하는 것이 창업의 목적 중 하나입니다.'
+  },
+
+  // ── E. 창업 유형 (슬라이드 9) ──────────────────────────
+  {
+    id:'e1', slide:'슬라이드 9',
+    text:'참신함·민첩성·디지털 능력이 강점이며, 실험·니치·혁신적 아이템을 선호하는 창업 유형은?',
+    opts:['청년창업','선택창업','기반창업','전문창업','안정창업'],
+    ansText:'청년창업',
+    explain:'슬라이드 9 — 청년창업(20~30초): 강점은 참신함·민첩성·디지털 능력. 선호 전략은 실험·니치·혁신적 아이템. 유의점은 경험 부족·변동성.'
+  },
+  {
+    id:'e2', slide:'슬라이드 9',
+    text:'경험 축적 초기 단계로 적성 맞춤이 강점이며, 적성 맞춤·리스크 분산 전략을 선호하는 창업 유형은?',
+    opts:['청년창업','선택창업','기반창업','전문창업','안정창업'],
+    ansText:'선택창업',
+    explain:'슬라이드 9 — 선택창업(30~34): 경력 5~10년. 강점은 경험 축적 초기·적성 맞춤. 선호 전략은 적성 맞춤·리스크 분산.'
+  },
+  {
+    id:'e3', slide:'슬라이드 9',
+    text:'인맥·안정성·리스크 관리가 강점이며, 검증된 아이템 확장 전략을 선호하는 창업 유형은?',
+    opts:['청년창업','선택창업','기반창업','전문창업','안정창업'],
+    ansText:'기반창업',
+    explain:'슬라이드 9 — 기반창업(35~39): 경력 10~15년. 강점은 인맥·안정성·리스크 관리. 선호 전략은 검증된 아이템 확장.'
+  },
+  {
+    id:'e4', slide:'슬라이드 9',
+    text:'전문성·노하우·전문기술이 강점이며, 전문분야 집중 전략을 선호하는 창업 유형은?',
+    opts:['청년창업','선택창업','기반창업','전문창업','안정창업'],
+    ansText:'전문창업',
+    explain:'슬라이드 9 — 전문창업(40~49): 경력 15~25년. 강점은 전문성·노하우·전문기술. 선호 전략은 전문분야 집중. 유의점은 과신·현장 소홀.'
+  },
+  {
+    id:'e5', slide:'슬라이드 9',
+    text:'자금력·관계망이 강점이며, 안정 운영·리스크 최소화 전략을 선호하는 창업 유형은?',
+    opts:['청년창업','선택창업','기반창업','전문창업','안정창업'],
+    ansText:'안정창업',
+    explain:'슬라이드 9 — 안정창업(50+): 경력 25년 이상. 강점은 자금력·관계망·안정 운영. 선호 전략은 안정 운영·리스크 최소화.'
+  },
+
+  // ── F. 성공요인 (슬라이드 11~13) ──────────────────────────
+  {
+    id:'f1', slide:'슬라이드 11',
+    text:'고객 흐름, 상권 구조, 경쟁·보완, 개발 계획, 비용·수익을 분석하여 어디에 자리를 잡을지 결정하는 성공요인은?',
+    opts:['입지력','상품력','경영력','구매력','홍보력'],
+    ansText:'입지력',
+    explain:'슬라이드 11 — 입지력: 고객 흐름, 상권 구조, 경쟁·보완, 개발 계획, 비용·수익의 5가지 핵심 요소로 위치 선정을 결정합니다.'
+  },
+  {
+    id:'f2', slide:'슬라이드 12',
+    text:'맛·일관성·위생·레시피 표준화, 메뉴 구성·제공시간·분량, 가격 전략이 해당되는 성공요인은?',
+    opts:['입지력','상품력','경영력','구매력','홍보력'],
+    ansText:'상품력',
+    explain:'슬라이드 12 — 상품력: 맛·일관성·위생·레시피 표준화, 메뉴 구성·제공시간·분량·시그니처·시즌 메뉴, 가격 전략(원가율·기대가치·프로모션)이 핵심입니다.'
+  },
+  {
+    id:'f3', slide:'슬라이드 13',
+    text:'시장 변화·트렌드 대응, 전략 실행력, 인력 이탈·원가 급등·클레임 등 위기 대응이 해당되는 성공요인은?',
+    opts:['입지력','상품력','경영력','구매력','홍보력'],
+    ansText:'경영력',
+    explain:'슬라이드 13 — 경영력: 시장 변화·트렌드 대응, 목표-KPI-점검-피드백 사이클의 전략 실행력, 위기 대응 매뉴얼이 핵심입니다.'
+  },
+  {
+    id:'f4', slide:'슬라이드 13',
+    text:'수급망 다변화·단가 협상·계약 관리, 품질·신선도 기준·적정 재고·발주, 제철·로컬 소싱이 해당되는 성공요인은?',
+    opts:['입지력','상품력','경영력','구매력','홍보력'],
+    ansText:'구매력',
+    explain:'슬라이드 13 — 구매력: 수급망 다변화·단가 협상·계약 관리, 품질·신선도 기준으로 안전재고 유지, 제철·로컬 소싱으로 원가와 품질을 동시에 확보합니다.'
+  }
+];
+
+// ── 셔플 ──────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── 퀴즈 셋 구성 — 보기 순서만 셔플 ─────────────────────────
+function buildQuizSet() {
+  return ALL_Q.map(raw => {
+    const shuffled = shuffle(raw.opts);
+    return { ...raw, opts: shuffled, ans: shuffled.indexOf(raw.ansText) };
+  });
+}
+
+// ── State ─────────────────────────────────────────────────────
+let QS       = [];
+let cur      = 0;
+let answered = [];
+let userText = [];
+
+function calcScore() {
+  let s = 0;
+  QS.forEach((q, i) => { if (answered[i] === q.ans) s += 4; });
+  return s;
+}
+
+function init() {
+  QS       = buildQuizSet();
+  cur      = 0;
+  answered = new Array(QS.length).fill(null);
+  userText = new Array(QS.length).fill('');
+  render();
+}
+
+// ── Render ────────────────────────────────────────────────────
+function render() {
+  if (cur >= QS.length) { renderScore(); return; }
+  const q          = QS[cur];
+  const pct        = ((cur + 1) / QS.length * 100).toFixed(1);
+  const isAnswered = answered[cur] !== null;
+  const letters    = ['①','②','③','④','⑤'];
+
+  let inputHtml = '<div class="options">';
+  q.opts.forEach((o, i) => {
+    let cls = 'opt';
+    if (isAnswered) {
+      if (i === q.ans)           cls += ' correct';
+      else if (i === answered[cur]) cls += ' wrong';
+    } else {
+      if (userText[cur] === String(i)) cls += ' selected';
+    }
+    inputHtml += `<button class="${cls}" ${isAnswered ? 'disabled' : ''} onclick="selectOpt(${i})">
+      <span class="letter">${letters[i]}</span>${o}</button>`;
+  });
+  inputHtml += '</div>';
+
+  let fbClass = '', fbTitle = '', fbBody = '';
+  if (isAnswered) {
+    const ok = answered[cur] === q.ans;
+    fbClass  = ok ? 'correct' : 'wrong';
+    fbTitle  = ok ? '정답!' : `오답 — 정답: ${letters[q.ans]} ${q.opts[q.ans]}`;
+    fbBody   = q.explain;
+  }
+
+  const isFirst = cur === 0;
+  const isLast  = cur === QS.length - 1;
+  let btnHtml = '';
+  btnHtml += `<button class="btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← 이전</button>`;
+  btnHtml += '<span class="spacer"></span>';
+  if (!isAnswered) {
+    const hasSel = userText[cur] !== '';
+    btnHtml += `<button class="btn primary" id="chkbtn" onclick="checkChoice()" ${hasSel ? '' : 'disabled'}>확인</button>`;
+  }
+  if (!isLast) {
+    btnHtml += `<button class="btn ${isAnswered ? 'primary' : ''}" onclick="goNext()" ${!isAnswered ? 'disabled' : ''}>다음 →</button>`;
+  } else {
+    btnHtml += `<button class="btn ${isAnswered ? 'primary' : ''}" onclick="renderScore()" ${!isAnswered ? 'disabled' : ''}>결과 보기</button>`;
+  }
+
+  document.getElementById('card').innerHTML = `
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <span class="progress-label">${cur + 1} / ${QS.length}</span>
+      <span class="score-badge">${calcScore()}점</span>
+    </div>
+    <div class="q-meta">
+      <span class="q-num">문제 ${cur + 1}</span>
+      <span class="q-slide">${q.slide}</span>
+      <span class="q-type-badge">객관식 ${q.opts.length}지선다</span>
+    </div>
+    <p class="q-text">${q.text}</p>
+    ${inputHtml}
+    <div class="feedback ${fbClass} ${isAnswered ? 'visible' : ''}">
+      <strong>${fbTitle}</strong>${fbBody}
+    </div>
+    <div class="btn-row">${btnHtml}</div>
+  `;
+}
+
+function selectOpt(i) {
+  if (answered[cur] !== null) return;
+  userText[cur] = String(i);
+  document.querySelectorAll('.opt').forEach((b, idx) => {
+    const me = idx === i;
+    b.classList.toggle('selected', me);
+    b.querySelector('.letter').style.background = me ? 'var(--green)' : '';
+    b.querySelector('.letter').style.color      = me ? '#fff' : '';
+  });
+  const chk = document.getElementById('chkbtn');
+  if (chk) chk.removeAttribute('disabled');
+}
+
+function checkChoice() {
+  const sel = parseInt(userText[cur]);
+  if (isNaN(sel)) return;
+  answered[cur] = sel;
+  render();
+}
+
+function goPrev() {
+  if (cur > 0) { cur--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+}
+
+function goNext() {
+  if (cur < QS.length - 1) { cur++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+}
+
+// ── Score Screen ──────────────────────────────────────────────
+function renderScore() {
+  const maxScore   = QS.length * 4;
+  const finalScore = calcScore();
+  let correct = 0;
+  answered.forEach((a, i) => { if (a === QS[i].ans) correct++; });
+
+  const emoji = correct >= 20 ? '🏆' : correct >= 15 ? '👍' : correct >= 10 ? '💪' : '📚';
+  const msg   = correct >= 20 ? '완벽합니다!' : correct >= 15 ? '잘했어요!' : correct >= 10 ? '조금만 더!' : '다시 한번 도전!';
+
+  let resultHtml = '';
+  QS.forEach((q, i) => {
+    const a  = answered[i];
+    const ok = a === q.ans;
+    const dotCls = a === null ? 'na' : ok ? 'ok' : 'ng';
+    const label  = a === null ? '미응답' : ok ? '정답' : '오답';
+    resultHtml += `<div class="result-item" onclick="jumpTo(${i})">
+      <div class="ri-dot ${dotCls}"></div>
+      <div>
+        <span class="ri-label">문제 ${i + 1} · ${label}</span>
+        <span class="ri-text">${q.text.slice(0, 28)}${q.text.length > 28 ? '…' : ''}</span>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('card').innerHTML = `
+    <div class="score-screen">
+      <div class="score-circle">
+        <span class="big">${finalScore}</span>
+        <span class="small">/ ${maxScore}점</span>
+      </div>
+      <h2>${emoji} ${msg}</h2>
+      <p>정답 ${correct}문제 / 전체 ${QS.length}문제</p>
+      <div class="divider"></div>
+      <p style="font-size:13px;color:var(--gray-400);margin-bottom:8px">문제 클릭 시 해당 문제로 이동합니다</p>
+      <div class="result-grid">${resultHtml}</div>
+      <div class="divider"></div>
+      <div class="btn-row" style="justify-content:center;gap:12px">
+        <button class="btn primary" onclick="init()">다시 풀기 (보기 새로 섞기)</button>
+        <a href="quiz.html" class="btn">← 시험 대비 15문제</a>
+      </div>
+    </div>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function jumpTo(i) {
+  cur = i;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+init();
+</script>
+</body>
+</html>
