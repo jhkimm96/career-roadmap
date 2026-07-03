@@ -54,6 +54,22 @@
   </div>
 
   <div class="section">
+    <div class="section-title">SAMBA vs NFS 관련 용어 ⭐⭐</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>관련 용어</th></tr>
+        <tr><td class="hot">SAMBA</td><td class="mono">SMB, CIFS, NetBIOS, nmbd, smbd, smb.conf</td></tr>
+        <tr><td class="hot">NFS</td><td class="mono">RPC, NFS, rpcbind(= portmap)</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 암기</div>
+      <p>SAMBA = 리눅스↔윈도우 공유. SMB→CIFS 프로토콜, 데몬은 <strong>smbd</strong>(파일/프린터 공유), <strong>nmbd</strong>(NetBIOS 이름 서비스), 설정파일은 <strong>smb.conf</strong></p>
+      <p>NFS = 리눅스↔리눅스 공유. <strong>RPC</strong>(Remote Procedure Call) 기반으로 동작 → <strong>rpcbind(=portmap)</strong> 데몬 실행이 선행되어야 함</p>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">DNS 관련</div>
     <div class="tbl-wrap">
       <table class="tbl">

@@ -94,6 +94,26 @@
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-title">TCP vs UDP ⭐ 2026.06 기출</div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tr><th>구분</th><th>TCP</th><th>UDP</th></tr>
+        <tr><td>연결 방식</td><td class="hot">연결형 (3-Way Handshake)</td><td class="hot">비연결형</td></tr>
+        <tr><td>신뢰성</td><td>높음 (재전송, 순서 보장)</td><td>낮음 (보장 없음)</td></tr>
+        <tr><td>오버헤드</td><td>큼 (흐름/오류 제어 수행)</td><td class="hot">작음 (제어 최소화)</td></tr>
+        <tr><td>속도</td><td>상대적으로 느림</td><td class="hot">빠름</td></tr>
+        <tr><td>PDU</td><td>세그먼트</td><td>데이터그램</td></tr>
+        <tr><td>대표 프로토콜</td><td>HTTP, FTP, SMTP, SSH</td><td>DNS(겸용), DHCP, SNMP, TFTP</td></tr>
+      </table>
+    </div>
+    <div class="memory">
+      <div class="mem-label">💡 암기</div>
+      <p>UDP = 확인응답·재전송 없음 → <strong>오버헤드 적고 빠름</strong>, 대신 신뢰성 낮음</p>
+      <p>TCP = 신뢰성 보장을 위해 <strong>오버헤드가 큼</strong></p>
+    </div>
+  </div>
+
   <div class="page-nav">
     <a href="topic12.html" class="page-btn">← Topic 12: IP 클래스</a>
     <a href="topic14.html" class="page-btn center">Topic 14: 포트번호 →</a>
